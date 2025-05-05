@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { setToken, getToken, removeToken } from '../../utils/auth';
 
-// Utility functions for token management
-const getToken = () => localStorage.getItem('token');
-const setToken = (token) => localStorage.setItem('token', token);
-const removeToken = () => localStorage.removeItem('token');
+// Load token from storage on app startup
+const initialToken = getToken();
 
 // Async thunks
 export const register = createAsyncThunk(
@@ -15,11 +14,9 @@ export const register = createAsyncThunk(
       setToken(data.token);
       return data;
     } catch (error) {
-      return rejectWithValue(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-      );
+      const message = error.response?.data?.message || error.message || 'Registration failed';
+      console.error('Registration error:', error.response?.data || error.message);
+      return rejectWithValue(message);
     }
   }
 );
@@ -29,14 +26,17 @@ export const login = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const { data } = await axios.post('/api/auth/login', userData);
+      
+      if (!data || !data.token) {
+        throw new Error('Invalid response from server. Missing token.');
+      }
+      
       setToken(data.token);
       return data;
     } catch (error) {
-      return rejectWithValue(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-      );
+      const message = error.response?.data?.message || error.message || 'Login failed';
+      console.error('Login error:', error.response?.data || error.message);
+      return rejectWithValue(message);
     }
   }
 );
@@ -45,7 +45,11 @@ export const getUserProfile = createAsyncThunk(
   'auth/getUserProfile',
   async (_, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth;
+      const token = getState().auth.token || initialToken;
+      
+      if (!token) {
+        throw new Error('No token found');
+      }
       
       const config = {
         headers: {
@@ -56,18 +60,43 @@ export const getUserProfile = createAsyncThunk(
       const { data } = await axios.get('/api/auth/me', config);
       return data;
     } catch (error) {
-      return rejectWithValue(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-      );
+      const message = error.response?.data?.message || error.message || 'Failed to load profile';
+      console.error('Get user profile error:', error.response?.data || error.message);
+      return rejectWithValue(message);
+    }
+  }
+);
+
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      
+      // Call logout endpoint (don't wait for it)
+      if (token) {
+        axios.post('/api/auth/logout', {}, {
+          headers: { Authorization: `Bearer ${token}` }
+        }).catch(err => {
+          console.warn('Error during logout API call:', err.message);
+        });
+      }
+      
+      // Always clear local storage
+      removeToken();
+      return null;
+    } catch (error) {
+      console.error('Error in logout process:', error);
+      // Still clear token on error
+      removeToken();
+      return null;
     }
   }
 );
 
 const initialState = {
-  token: getToken(),
-  isAuthenticated: !!getToken(),
+  token: initialToken,
+  isAuthenticated: !!initialToken,
   user: null,
   loading: false,
   error: null,
@@ -77,15 +106,22 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: (state) => {
-      removeToken();
-      state.user = null;
-      state.token = null;
-      state.isAuthenticated = false;
-    },
     clearError: (state) => {
       state.error = null;
     },
+    setCredentials: (state, action) => {
+      state.token = action.payload.token;
+      state.isAuthenticated = true;
+      state.user = action.payload.user;
+    },
+    resetAuth: (state) => {
+      state.token = null;
+      state.isAuthenticated = false;
+      state.user = null;
+      state.error = null;
+      state.loading = false;
+      removeToken();
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -122,18 +158,36 @@ const authSlice = createSlice({
       // Get User Profile
       .addCase(getUserProfile.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(getUserProfile.fulfilled, (state, action) => {
         state.loading = false;
+        state.isAuthenticated = true;
         state.user = action.payload;
       })
       .addCase(getUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        // If API call failed due to auth issues, clear auth state
+        if (
+          action.payload === 'Not authorized, token failed' ||
+          action.payload === 'Not authorized, no token' ||
+          action.payload === 'No token found'
+        ) {
+          state.token = null;
+          state.isAuthenticated = false;
+          state.user = null;
+          removeToken();
+        }
+      })
+      // Logout
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
       });
   },
 });
 
-export const { logout, clearError } = authSlice.actions;
-
+export const { clearError, setCredentials, resetAuth } = authSlice.actions;
 export default authSlice.reducer;

@@ -56,7 +56,24 @@ const LessonView = ({ course, enrollment }) => {
     return Math.round((completedModuleLessons / moduleLessons.length) * 100);
   };
   
-  if (!course || !course.modules) return null;
+  // Show a fallback message if course or modules are missing
+  if (!course) {
+    return (
+      <div className="p-4 border border-yellow-200 bg-yellow-50 rounded-md">
+        <h3 className="text-lg font-medium text-yellow-800">Course content unavailable</h3>
+        <p className="mt-2 text-yellow-700">The course content couldn't be loaded. Please try again later.</p>
+      </div>
+    );
+  }
+  
+  if (!course.modules || course.modules.length === 0) {
+    return (
+      <div className="p-4 border border-blue-200 bg-blue-50 rounded-md">
+        <h3 className="text-lg font-medium text-blue-800">No modules available</h3>
+        <p className="mt-2 text-blue-700">This course doesn't have any content modules yet. Please check back soon.</p>
+      </div>
+    );
+  }
   
   return (
     <div className="space-y-6 mt-4">
@@ -94,52 +111,58 @@ const LessonView = ({ course, enrollment }) => {
           {/* Lessons List */}
           {moduleIndex === expandedModule && (
             <div className="divide-y">
-              {module.lessons && module.lessons.map((lesson, lessonIndex) => (
-                <div key={lessonIndex} className="p-4 flex justify-between items-center">
-                  <div className="flex items-center">
-                    <span className="mr-3">Lesson {lessonIndex + 1}:</span>
-                    <div>
-                      <h4 className="font-medium">{lesson.title}</h4>
-                      <div className="text-sm text-gray-500">{lesson.duration || 0} min</div>
+              {module.lessons && module.lessons.length > 0 ? (
+                module.lessons.map((lesson, lessonIndex) => (
+                  <div key={lessonIndex} className="p-4 flex justify-between items-center">
+                    <div className="flex items-center">
+                      <span className="mr-3">Lesson {lessonIndex + 1}:</span>
+                      <div>
+                        <h4 className="font-medium">{lesson.title}</h4>
+                        <div className="text-sm text-gray-500">{lesson.duration || 0} min</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center">
+                      {enrollment && (
+                        <button
+                          onClick={() => handleToggleLessonCompletion(lesson._id)}
+                          disabled={loading}
+                          className={`flex items-center mr-2 px-3 py-1 rounded text-sm ${
+                            isLessonCompleted(lesson._id)
+                              ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                              : 'bg-gray-100 hover:bg-gray-200'
+                          }`}
+                        >
+                          {isLessonCompleted(lesson._id) ? (
+                            <>
+                              <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                              Completed
+                            </>
+                          ) : (
+                            <>Mark Complete</>
+                          )}
+                        </button>
+                      )}
+                      
+                      <button 
+                        className="text-blue-600 hover:underline text-sm"
+                        onClick={() => {
+                          // Implement view lesson content logic here
+                          toast.info(`Lesson content: ${lesson.title}`);
+                        }}
+                      >
+                        View Content
+                      </button>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center">
-                    {enrollment && (
-                      <button
-                        onClick={() => handleToggleLessonCompletion(lesson._id)}
-                        disabled={loading}
-                        className={`flex items-center mr-2 px-3 py-1 rounded text-sm ${
-                          isLessonCompleted(lesson._id)
-                            ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                            : 'bg-gray-100 hover:bg-gray-200'
-                        }`}
-                      >
-                        {isLessonCompleted(lesson._id) ? (
-                          <>
-                            <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                            Completed
-                          </>
-                        ) : (
-                          <>Mark Complete</>
-                        )}
-                      </button>
-                    )}
-                    
-                    <button 
-                      className="text-blue-600 hover:underline text-sm"
-                      onClick={() => {
-                        // Implement view lesson content logic here
-                        toast.info(`Lesson content: ${lesson.title}`);
-                      }}
-                    >
-                      View Content
-                    </button>
-                  </div>
+                ))
+              ) : (
+                <div className="p-4 text-center text-gray-500">
+                  No lessons available in this module
                 </div>
-              ))}
+              )}
             </div>
           )}
           

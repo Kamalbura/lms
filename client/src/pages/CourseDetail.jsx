@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import LessonView from '../components/LessonView';
 import MediaDisplay from '../components/MediaDisplay';
 import ImageWithFallback from '../components/ImageWithFallback';
+import CourseChat from '../components/CourseChat';
+import CompletionCelebration from '../components/CompletionCelebration';
 
 const CourseDetail = () => {
   const { slug } = useParams();
@@ -13,9 +15,22 @@ const CourseDetail = () => {
   const [error, setError] = useState(null);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [enrollment, setEnrollment] = useState(null);
+  const [showCelebration, setShowCelebration] = useState(false);
   
   const navigate = useNavigate();
   const { user, token, isAuthenticated } = useSelector(state => state.auth);
+
+  // Check if course was just completed
+  useEffect(() => {
+    if (enrollment && enrollment.progress === 100) {
+      // Check if this is first time hitting 100% (using localStorage)
+      const completedKey = `completed-${course?._id}`;
+      if (!localStorage.getItem(completedKey)) {
+        localStorage.setItem(completedKey, 'true');
+        setShowCelebration(true);
+      }
+    }
+  }, [enrollment, course]);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -47,7 +62,7 @@ const CourseDetail = () => {
   }, [slug, token, isAuthenticated]);
 
   useEffect(() => {
-    if (isEnrolled) {
+    if (isEnrolled && course) {
       const fetchEnrollment = async () => {
         try {
           const { data } = await axios.get(`/api/enroll/${course._id}/details`, {
@@ -113,6 +128,12 @@ const CourseDetail = () => {
 
   return (
     <div className="container mx-auto p-4">
+      {/* Show completion celebration if needed */}
+      <CompletionCelebration 
+        show={showCelebration} 
+        onComplete={() => setShowCelebration(false)} 
+      />
+      
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         {course.thumbnail && (
           <ImageWithFallback 
@@ -181,6 +202,13 @@ const CourseDetail = () => {
               </div>
               
               <LessonView course={course} enrollment={enrollment} />
+              
+              <div className="mt-8">
+                <h2 className="text-2xl font-bold mb-4">Course Discussion</h2>
+                <div className="h-96 border border-gray-200 rounded-lg">
+                  <CourseChat courseId={course._id} />
+                </div>
+              </div>
             </div>
           )}
           

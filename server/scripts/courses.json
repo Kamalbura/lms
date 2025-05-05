@@ -1,0 +1,222 @@
+[
+  {
+    "title": "Introduction to JavaScript",
+    "slug": "introduction-to-javascript",
+    "description": "Learn the fundamentals of JavaScript, the language of the web.",
+    "previewVideo": "https://www.youtube.com/embed/W6NZfCO5SIk",
+    "instructor": "60f6f9e2f9a1234567890abc",     
+    "modules": [
+      { "title": "Basics", "lessons": [{ "title": "Syntax & Variables", "content": "..." }] },
+      { "title": "DOM",    "lessons": [{ "title": "Selecting Elements", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Advanced React Patterns",
+    "slug": "advanced-react-patterns",
+    "description": "Hooks, Context, Render Props and more.",
+    "previewVideo": "https://www.youtube.com/embed/DPnqb74Smug",
+    "instructor": "60f6f9e2f9a1234567890def",
+    "modules": [
+      { "title": "Hooks Deep Dive", "lessons": [{ "title": "useReducer", "content": "..." }] },
+      { "title": "Patterns",       "lessons": [{ "title": "Render Props", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Fundamentals of Digital Electronics",
+    "slug": "fundamentals-of-digital-electronics",
+    "description": "Logic gates, flip-flops and combinational design.",
+    "previewVideo": "https://www.youtube.com/embed/XBkkmb8mX8I",
+    "instructor": "60f6f9e2f9a1234567890aaa",
+    "modules": [
+      { "title": "Logic Gates", "lessons": [{ "title": "AND, OR, NOT", "content": "..." }] },
+      { "title": "Combinational", "lessons": [{ "title": "Adders and MUX", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Introduction to Python for Data Science",
+    "slug": "introduction-to-python-for-data-science",
+    "description": "Python basics, NumPy, Pandas, and Matplotlib.",
+    "previewVideo": "https://www.youtube.com/embed/rfscVS0vtbw",
+    "instructor": "60f6f9e2f9a1234567890bbb",
+    "modules": [
+      { "title": "Python Basics", "lessons": [{ "title": "Variables & Data Types", "content": "..." }] },
+      { "title": "Pandas",        "lessons": [{ "title": "DataFrames", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Project Management Essentials",
+    "slug": "project-management-essentials",
+    "description": "Agile, Scrum, and Waterfall methodologies.",
+    "previewVideo": "https://www.youtube.com/embed/9JpR8X1MzRo",
+    "instructor": "60f6f9e2f9a1234567890ccc",
+    "modules": [
+      { "title": "Agile Basics",  "lessons": [{ "title": "Scrum Roles", "content": "..." }] },
+      { "title": "Planning",      "lessons": [{ "title": "Sprint Planning", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Graphic Design with Adobe Photoshop",
+    "slug": "graphic-design-with-adobe-photoshop",
+    "description": "Layers, masks, filters and compositing.",
+    "previewVideo": "https://www.youtube.com/embed/2H9pP_fj4GE",
+    "instructor": "60f6f9e2f9a1234567890ddd",
+    "modules": [
+      { "title": "Interface",      "lessons": [{ "title": "Panels & Tools", "content": "..." }] },
+      { "title": "Photo Editing",  "lessons": [{ "title": "Retouching", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Basics of Financial Accounting",
+    "slug": "basics-of-financial-accounting",
+    "description": "Journal entries, T-accounts, and trial balance.",
+    "previewVideo": "https://www.youtube.com/embed/5gkNmwLIS6o",
+    "instructor": "60f6f9e2f9a1234567890eee",
+    "modules": [
+      { "title": "Journal Entries", "lessons": [{ "title": "Debits & Credits", "content": "..." }] },
+      { "title": "Financial Statements", "lessons": [{ "title": "Balance Sheet", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Foundations of Machine Learning",
+    "slug": "foundations-of-machine-learning",
+    "description": "Linear regression, classification, clustering.",
+    "previewVideo": "https://www.youtube.com/embed/GwIo3gDZCVQ",
+    "instructor": "60f6f9e2f9a1234567890fff",
+    "modules": [
+      { "title": "Regression", "lessons": [{ "title": "OLS", "content": "..." }] },
+      { "title": "Classification", "lessons": [{ "title": "Logistic Regression", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Creative Writing Workshop",
+    "slug": "creative-writing-workshop",
+    "description": "Story structure, character development, and editing.",
+    "previewVideo": "https://www.youtube.com/embed/3IPiYSjzY80",
+    "instructor": "60f6f9e2f9a1234567890ggg",
+    "modules": [
+      { "title": "Plot",      "lessons": [{ "title": "Three-Act", "content": "..." }] },
+      { "title": "Characters","lessons": [{ "title": "Archetypes", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Digital Marketing Fundamentals",
+    "slug": "digital-marketing-fundamentals",
+    "description": "SEO, SEM, social media, email marketing.",
+    "previewVideo": "https://www.youtube.com/embed/k2abzE0s2lg",
+    "instructor": "60f6f9e2f9a1234567890hhh",
+    "modules": [
+      { "title": "SEO Basics",  "lessons": [{ "title": "On-Page SEO", "content": "..." }] },
+      { "title": "Social Media", "lessons": [{ "title": "Content Strategy", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Ethical Hacking Basics",
+    "slug": "ethical-hacking-basics",
+    "description": "Pentesting, vulnerability scanning, and Kali Linux usage.",
+    "previewVideo": "https://www.youtube.com/embed/WMB3vJvyjVg",
+    "instructor": "60f6f9e2f9a1234567890iii",
+    "modules": [
+      { "title": "Reconnaissance", "lessons": [{ "title": "Footprinting", "content": "..." }] },
+      { "title": "Scanning",       "lessons": [{ "title": "Nmap", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Principles of UX/UI Design",
+    "slug": "principles-of-ux-ui-design",
+    "description": "User research, wireframing, prototyping with Figma.",
+    "previewVideo": "https://www.youtube.com/embed/4OeA5TR6GJY",
+    "instructor": "60f6f9e2f9a1234567890jjj",
+    "modules": [
+      { "title": "Research",  "lessons": [{ "title": "Personas", "content": "..." }] },
+      { "title": "Wireframing","lessons": [{ "title": "Lo-fi", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Cloud Computing with AWS",
+    "slug": "cloud-computing-with-aws",
+    "description": "EC2, S3, Lambda, IAM essentials.",
+    "previewVideo": "https://www.youtube.com/embed/3hLmDS179YE",
+    "instructor": "60f6f9e2f9a1234567890kkk",
+    "modules": [
+      { "title": "Compute",   "lessons": [{ "title": "EC2", "content": "..." }] },
+      { "title": "Storage",   "lessons": [{ "title": "S3", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Fundamentals of Cybersecurity",
+    "slug": "fundamentals-of-cybersecurity",
+    "description": "Threat modeling, encryption, network security.",
+    "previewVideo": "https://www.youtube.com/embed/3OX6hA7kMpQ",
+    "instructor": "60f6f9e2f9a1234567890lll",
+    "modules": [
+      { "title": "Crypto",     "lessons": [{ "title": "AES", "content": "..." }] },
+      { "title": "Networking", "lessons": [{ "title": "Firewalls", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Business Analytics with Power BI",
+    "slug": "business-analytics-with-power-bi",
+    "description": "Data modeling, DAX, visualization best practices.",
+    "previewVideo": "https://www.youtube.com/embed/Rb2w4vNcOec",
+    "instructor": "60f6f9e2f9a1234567890mmm",
+    "modules": [
+      { "title": "Modeling",    "lessons": [{ "title": "Star Schema", "content": "..." }] },
+      { "title": "DAX Basics",  "lessons": [{ "title": "Measures", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Advanced SQL Queries",
+    "slug": "advanced-sql-queries",
+    "description": "Window functions, CTEs, pivot/unpivot.",
+    "previewVideo": "https://www.youtube.com/embed/7S_tz1z_5bA",
+    "instructor": "60f6f9e2f9a1234567890nnn",
+    "modules": [
+      { "title": "Window Functions", "lessons": [{ "title": "ROW_NUMBER", "content": "..." }] },
+      { "title": "Subqueries",       "lessons": [{ "title": "CTEs", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Mobile App Development with Flutter",
+    "slug": "mobile-app-development-with-flutter",
+    "description": "Dart basics, widgets, state management with Provider.",
+    "previewVideo": "https://www.youtube.com/embed/fq4N0hgOWzU",
+    "instructor": "60f6f9e2f9a1234567890ooo",
+    "modules": [
+      { "title": "Dart Syntax",        "lessons": [{ "title": "Variables & Types", "content": "..." }] },
+      { "title": "Widgets Deep Dive",  "lessons": [{ "title": "Stateless", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Project Planning with MS Project",
+    "slug": "project-planning-with-ms-project",
+    "description": "Gantt charts, resource allocation, baselining.",
+    "previewVideo": "https://www.youtube.com/embed/tPx1yqvJWE0",
+    "instructor": "60f6f9e2f9a1234567890ppp",
+    "modules": [
+      { "title": "Scheduling",     "lessons": [{ "title": "Gantt Basics", "content": "..." }] },
+      { "title": "Resources",      "lessons": [{ "title": "Allocation", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Introduction to Blockchain",
+    "slug": "introduction-to-blockchain",
+    "description": "Decentralization, consensus algorithms, smart contracts.",
+    "previewVideo": "https://www.youtube.com/embed/SSo_EIwHSd4",
+    "instructor": "60f6f9e2f9a1234567890qqq",
+    "modules": [
+      { "title": "Blockchain Basics", "lessons": [{ "title": "Blocks & Chains", "content": "..." }] },
+      { "title": "Ethereum",          "lessons": [{ "title": "Smart Contracts", "content": "..." }] }
+    ]
+  },
+  {
+    "title": "Fundamentals of Artificial Intelligence",
+    "slug": "fundamentals-of-artificial-intelligence",
+    "description": "Search, planning, knowledge representation.",
+    "previewVideo": "https://www.youtube.com/embed/FvmmnDZ3D6g",
+    "instructor": "60f6f9e2f9a1234567890rrr",
+    "modules": [
+      { "title": "Search",       "lessons": [{ "title": "A*", "content": "..." }] },
+      { "title": "Planning",     "lessons": [{ "title": "STRIPS", "content": "..." }] }
+    ]
+  }
+]

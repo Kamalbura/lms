@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose"; // Adding missing mongoose import
 import { getSystemConfig } from "../controllers/configController.js";
 import { protect, restrictTo } from "../middleware/authMiddleware.js";
 

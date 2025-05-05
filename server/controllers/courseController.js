@@ -39,7 +39,7 @@ export const getAllCourses = async (req, res) => {
   try {
     // Pagination
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || process.env.PAGINATION_LIMIT || 10;
+    const limit = parseInt(req.query.limit) || 20; // Increased from default 10 to 20
     const skip = (page - 1) * limit;
     
     // Filter options

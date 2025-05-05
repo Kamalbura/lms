@@ -1,0 +1,1410 @@
+[
+  {
+    "title": "Modern Web Development with React",
+    "slug": "modern-web-development-with-react",
+    "description": "Learn modern web development using React, Redux, and related ecosystem tools to build scalable and interactive web applications.",
+    "category": "CSE",
+    "duration": 48,
+    "level": "Intermediate", 
+    "price": 79.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-react.jpg",
+    "previewVideo": "https://www.youtube.com/embed/w7ejDZ8SWv8",
+    "modules": [
+      {
+        "title": "Introduction to React",
+        "lessons": [
+          {
+            "title": "React Fundamentals",
+            "content": "Introduction to React components, JSX syntax, and the virtual DOM.",
+            "duration": 45
+          },
+          {
+            "title": "Component Lifecycle",
+            "content": "Understanding React component lifecycle methods and hooks.",
+            "duration": 50
+          }
+        ]
+      },
+      {
+        "title": "State Management",
+        "lessons": [
+          {
+            "title": "Managing State with Redux",
+            "content": "Learn to use Redux for global state management in React applications.",
+            "duration": 60
+          },
+          {
+            "title": "Context API and Hooks",
+            "content": "Using React Context API and hooks as alternatives to Redux.",
+            "duration": 55
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Introduction to Machine Learning",
+    "slug": "introduction-to-machine-learning",
+    "description": "A comprehensive introduction to machine learning concepts, algorithms, and practical applications using Python.",
+    "category": "CSE",
+    "duration": 50,
+    "level": "Beginner",
+    "price": 89.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-ml.jpg",
+    "previewVideo": "https://www.youtube.com/embed/ukzFI9rgwfU",
+    "modules": [
+      {
+        "title": "Foundations of ML",
+        "lessons": [
+          {
+            "title": "What is Machine Learning?",
+            "content": "Introduction to machine learning concepts and terminology.",
+            "duration": 40
+          },
+          {
+            "title": "Types of Machine Learning",
+            "content": "Supervised, unsupervised, and reinforcement learning explained.",
+            "duration": 45
+          }
+        ]
+      },
+      {
+        "title": "Core Algorithms",
+        "lessons": [
+          {
+            "title": "Linear Regression",
+            "content": "Understanding and implementing linear regression models.",
+            "duration": 50
+          },
+          {
+            "title": "Classification Algorithms",
+            "content": "Exploring logistic regression, decision trees, and random forests.",
+            "duration": 55
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Cloud Computing with AWS",
+    "slug": "cloud-computing-with-aws",
+    "description": "Master Amazon Web Services (AWS) cloud infrastructure, services, and best practices for building scalable applications.",
+    "category": "CSE",
+    "duration": 40,
+    "level": "Intermediate",
+    "price": 99.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-aws.jpg",
+    "previewVideo": "https://www.youtube.com/embed/ulprqHHWlng",
+    "modules": [
+      {
+        "title": "AWS Fundamentals",
+        "lessons": [
+          {
+            "title": "Introduction to AWS",
+            "content": "Overview of AWS platform and services.",
+            "duration": 35
+          },
+          {
+            "title": "Setting Up Your AWS Account",
+            "content": "Step-by-step guide to setting up and securing an AWS account.",
+            "duration": 30
+          }
+        ]
+      },
+      {
+        "title": "Core Services",
+        "lessons": [
+          {
+            "title": "EC2 and Virtual Servers",
+            "content": "Creating and managing EC2 instances.",
+            "duration": 45
+          },
+          {
+            "title": "S3 and Storage Solutions",
+            "content": "Working with S3 for object storage and other AWS storage services.",
+            "duration": 40
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Mobile App Development with Flutter",
+    "slug": "mobile-app-development-with-flutter",
+    "description": "Create beautiful cross-platform mobile applications using Flutter and Dart, Google's UI toolkit.",
+    "category": "CSE",
+    "duration": 45,
+    "level": "Intermediate",
+    "price": 84.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-flutter.jpg",
+    "previewVideo": "https://www.youtube.com/embed/1ukSR1GRtMU",
+    "modules": [
+      {
+        "title": "Flutter Basics",
+        "lessons": [
+          {
+            "title": "Setting Up Flutter",
+            "content": "Installing Flutter and setting up your development environment.",
+            "duration": 35
+          },
+          {
+            "title": "Dart Programming Language",
+            "content": "Introduction to Dart language fundamentals.",
+            "duration": 40
+          }
+        ]
+      },
+      {
+        "title": "Building UI",
+        "lessons": [
+          {
+            "title": "Widgets and Layouts",
+            "content": "Understanding Flutter's widget system and building layouts.",
+            "duration": 50
+          },
+          {
+            "title": "Navigation and Routing",
+            "content": "Implementing navigation between screens in Flutter apps.",
+            "duration": 45
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Full Stack JavaScript Development",
+    "slug": "full-stack-javascript-development",
+    "description": "Become a full stack developer using JavaScript for both front-end and back-end development with MERN stack.",
+    "category": "CSE",
+    "duration": 55,
+    "level": "Advanced",
+    "price": 94.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-fullstack-js.jpg",
+    "previewVideo": "https://www.youtube.com/embed/nu_pCVPKzTk",
+    "modules": [
+      {
+        "title": "Backend Development",
+        "lessons": [
+          {
+            "title": "Node.js Fundamentals",
+            "content": "Introduction to Node.js runtime and basic server concepts.",
+            "duration": 55
+          },
+          {
+            "title": "Express.js Framework",
+            "content": "Building RESTful APIs with Express.js.",
+            "duration": 60
+          }
+        ]
+      },
+      {
+        "title": "Frontend Development",
+        "lessons": [
+          {
+            "title": "Modern JavaScript",
+            "content": "ES6+ features and best practices in JavaScript.",
+            "duration": 45
+          },
+          {
+            "title": "React Fundamentals",
+            "content": "Building interactive UIs with React.",
+            "duration": 50
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "IoT System Design",
+    "slug": "iot-system-design",
+    "description": "Design and implement complete IoT systems from sensors to cloud, including hardware integration and software development.",
+    "category": "IoT",
+    "duration": 35,
+    "level": "Intermediate",
+    "price": 79.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-iot-design.jpg",
+    "previewVideo": "https://www.youtube.com/embed/LlhmzVL5bm8",
+    "modules": [
+      {
+        "title": "IoT Architecture",
+        "lessons": [
+          {
+            "title": "IoT System Components",
+            "content": "Understanding the key components of IoT systems.",
+            "duration": 40
+          },
+          {
+            "title": "Communication Protocols",
+            "content": "Exploring MQTT, CoAP, and other IoT protocols.",
+            "duration": 45
+          }
+        ]
+      },
+      {
+        "title": "Hardware Integration",
+        "lessons": [
+          {
+            "title": "Sensor Integration",
+            "content": "Connecting and programming various sensors.",
+            "duration": 50
+          },
+          {
+            "title": "Microcontroller Programming",
+            "content": "Programming microcontrollers for IoT applications.",
+            "duration": 55
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Smart Home Automation",
+    "slug": "smart-home-automation",
+    "description": "Learn to build and integrate smart home devices and systems using popular platforms and protocols.",
+    "category": "IoT",
+    "duration": 30,
+    "level": "Beginner",
+    "price": 59.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-smart-home.jpg",
+    "previewVideo": "https://www.youtube.com/embed/6e_IjvU3Isg",
+    "modules": [
+      {
+        "title": "Home Automation Basics",
+        "lessons": [
+          {
+            "title": "Introduction to Smart Homes",
+            "content": "Overview of smart home technologies and ecosystems.",
+            "duration": 35
+          },
+          {
+            "title": "Automation Platforms",
+            "content": "Comparing Home Assistant, SmartThings, and other platforms.",
+            "duration": 40
+          }
+        ]
+      },
+      {
+        "title": "DIY Smart Devices",
+        "lessons": [
+          {
+            "title": "Building Smart Switches",
+            "content": "Creating your own WiFi-enabled smart switches.",
+            "duration": 50
+          },
+          {
+            "title": "Voice Control Integration",
+            "content": "Adding voice assistant capabilities to your projects.",
+            "duration": 45
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Industrial IoT Applications",
+    "slug": "industrial-iot-applications",
+    "description": "Practical applications of IoT in industrial settings, including manufacturing automation and predictive maintenance.",
+    "category": "IoT",
+    "duration": 40,
+    "level": "Advanced",
+    "price": 89.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-industrial-iot.jpg",
+    "previewVideo": "https://www.youtube.com/embed/ATIpHrXlm4w",
+    "modules": [
+      {
+        "title": "Industrial IoT Fundamentals",
+        "lessons": [
+          {
+            "title": "IIoT vs Consumer IoT",
+            "content": "Understanding the differences between industrial and consumer IoT.",
+            "duration": 40
+          },
+          {
+            "title": "Industry 4.0 Concepts",
+            "content": "Exploring the fourth industrial revolution technologies.",
+            "duration": 45
+          }
+        ]
+      },
+      {
+        "title": "Practical Applications",
+        "lessons": [
+          {
+            "title": "Predictive Maintenance",
+            "content": "Implementing predictive maintenance systems using IoT.",
+            "duration": 55
+          },
+          {
+            "title": "Manufacturing Automation",
+            "content": "Automating manufacturing processes with IoT technologies.",
+            "duration": 50
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Embedded Systems Programming",
+    "slug": "embedded-systems-programming",
+    "description": "Comprehensive guide to programming embedded systems, from microcontrollers to real-time operating systems.",
+    "category": "Embedded Systems",
+    "duration": 45,
+    "level": "Intermediate",
+    "price": 74.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-embedded.jpg",
+    "previewVideo": "https://www.youtube.com/embed/3V9eqvkMzHA",
+    "modules": [
+      {
+        "title": "Embedded C Programming",
+        "lessons": [
+          {
+            "title": "C for Embedded Systems",
+            "content": "Specialized C programming techniques for resource-constrained environments.",
+            "duration": 50
+          },
+          {
+            "title": "Memory Management",
+            "content": "Efficient memory management in embedded systems.",
+            "duration": 45
+          }
+        ]
+      },
+      {
+        "title": "Microcontroller Programming",
+        "lessons": [
+          {
+            "title": "ARM Cortex-M Programming",
+            "content": "Programming ARM Cortex-M series microcontrollers.",
+            "duration": 55
+          },
+          {
+            "title": "Peripheral Interfaces",
+            "content": "Working with GPIO, UART, I2C, SPI, and other interfaces.",
+            "duration": 50
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "RTOS Development",
+    "slug": "rtos-development",
+    "description": "Master real-time operating system concepts and development for embedded applications requiring precise timing.",
+    "category": "Embedded Systems",
+    "duration": 50,
+    "level": "Advanced",
+    "price": 89.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-rtos.jpg",
+    "previewVideo": "https://www.youtube.com/embed/F321087yYy4",
+    "modules": [
+      {
+        "title": "RTOS Fundamentals",
+        "lessons": [
+          {
+            "title": "Real-Time Concepts",
+            "content": "Introduction to real-time computing and scheduling.",
+            "duration": 45
+          },
+          {
+            "title": "FreeRTOS Architecture",
+            "content": "Understanding the architecture of FreeRTOS.",
+            "duration": 50
+          }
+        ]
+      },
+      {
+        "title": "RTOS Implementation",
+        "lessons": [
+          {
+            "title": "Task Management",
+            "content": "Creating, scheduling, and managing tasks in an RTOS.",
+            "duration": 55
+          },
+          {
+            "title": "Inter-Task Communication",
+            "content": "Using queues, semaphores, and mutexes for communication.",
+            "duration": 60
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Effective Communication Skills",
+    "slug": "effective-communication-skills",
+    "description": "Develop essential communication skills for professional success, including verbal, non-verbal, and written communication.",
+    "category": "Skill Development",
+    "duration": 20,
+    "level": "Beginner",
+    "price": 49.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-communication.jpg",
+    "previewVideo": "https://www.youtube.com/embed/ky6FJ3AxwFY",
+    "modules": [
+      {
+        "title": "Verbal Communication",
+        "lessons": [
+          {
+            "title": "Public Speaking Fundamentals",
+            "content": "Mastering the basics of effective public speaking.",
+            "duration": 30
+          },
+          {
+            "title": "Active Listening",
+            "content": "Developing active listening skills for better communication.",
+            "duration": 25
+          }
+        ]
+      },
+      {
+        "title": "Written Communication",
+        "lessons": [
+          {
+            "title": "Business Writing",
+            "content": "Writing clear and effective business communications.",
+            "duration": 35
+          },
+          {
+            "title": "Email Etiquette",
+            "content": "Best practices for professional email communication.",
+            "duration": 20
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Leadership and Team Management",
+    "slug": "leadership-and-team-management",
+    "description": "Learn effective leadership skills and techniques for managing teams in various professional environments.",
+    "category": "Skill Development",
+    "duration": 30,
+    "level": "Intermediate",
+    "price": 69.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-leadership.jpg",
+    "previewVideo": "https://www.youtube.com/embed/L2kG_rNBD0s",
+    "modules": [
+      {
+        "title": "Leadership Fundamentals",
+        "lessons": [
+          {
+            "title": "Leadership Styles",
+            "content": "Understanding different leadership styles and their applications.",
+            "duration": 40
+          },
+          {
+            "title": "Building Team Trust",
+            "content": "Strategies for building trust and cohesion within teams.",
+            "duration": 35
+          }
+        ]
+      },
+      {
+        "title": "Team Dynamics",
+        "lessons": [
+          {
+            "title": "Conflict Resolution",
+            "content": "Managing and resolving conflicts in team environments.",
+            "duration": 45
+          },
+          {
+            "title": "Performance Management",
+            "content": "Setting goals and managing team performance effectively.",
+            "duration": 40
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Time Management and Productivity",
+    "slug": "time-management-and-productivity",
+    "description": "Learn strategies and techniques to maximize productivity and effectively manage your time in professional and personal contexts.",
+    "category": "Skill Development",
+    "duration": 15,
+    "level": "Beginner",
+    "price": 39.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-time-management.jpg",
+    "previewVideo": "https://www.youtube.com/embed/VUk6LXRZMMk",
+    "modules": [
+      {
+        "title": "Productivity Foundations",
+        "lessons": [
+          {
+            "title": "Time Audit",
+            "content": "Analyzing how you currently use your time.",
+            "duration": 20
+          },
+          {
+            "title": "Priority Management",
+            "content": "Techniques for identifying and focusing on high-priority tasks.",
+            "duration": 25
+          }
+        ]
+      },
+      {
+        "title": "Productivity Systems",
+        "lessons": [
+          {
+            "title": "Getting Things Done (GTD)",
+            "content": "Implementing David Allen's GTD methodology.",
+            "duration": 30
+          },
+          {
+            "title": "Pomodoro Technique",
+            "content": "Using time boxing to enhance focus and productivity.",
+            "duration": 15
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Critical Thinking and Problem Solving",
+    "slug": "critical-thinking-and-problem-solving",
+    "description": "Develop analytical thinking skills and systematic approaches to solve complex problems effectively.",
+    "category": "Skill Development",
+    "duration": 25,
+    "level": "Intermediate",
+    "price": 59.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-critical-thinking.jpg",
+    "previewVideo": "https://www.youtube.com/embed/HnJ1bqXUnIM",
+    "modules": [
+      {
+        "title": "Critical Thinking Fundamentals",
+        "lessons": [
+          {
+            "title": "Logical Reasoning",
+            "content": "Understanding inductive and deductive reasoning.",
+            "duration": 35
+          },
+          {
+            "title": "Cognitive Biases",
+            "content": "Recognizing and overcoming common cognitive biases.",
+            "duration": 30
+          }
+        ]
+      },
+      {
+        "title": "Problem-Solving Frameworks",
+        "lessons": [
+          {
+            "title": "Structured Problem Solving",
+            "content": "Using frameworks like PDCA and DMAIC for systematic problem solving.",
+            "duration": 40
+          },
+          {
+            "title": "Creative Problem Solving",
+            "content": "Techniques for generating innovative solutions.",
+            "duration": 35
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Negotiation and Conflict Resolution",
+    "slug": "negotiation-and-conflict-resolution",
+    "description": "Master the art of negotiation and learn effective strategies for resolving conflicts in personal and professional settings.",
+    "category": "Skill Development",
+    "duration": 20,
+    "level": "Intermediate",
+    "price": 54.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-negotiation.jpg",
+    "previewVideo": "https://www.youtube.com/embed/MXFpOWDAhvM",
+    "modules": [
+      {
+        "title": "Negotiation Fundamentals",
+        "lessons": [
+          {
+            "title": "Negotiation Styles",
+            "content": "Understanding different approaches to negotiation.",
+            "duration": 30
+          },
+          {
+            "title": "BATNA and Leverage",
+            "content": "Identifying your Best Alternative to a Negotiated Agreement.",
+            "duration": 25
+          }
+        ]
+      },
+      {
+        "title": "Conflict Resolution",
+        "lessons": [
+          {
+            "title": "Conflict Analysis",
+            "content": "Tools for understanding the root causes of conflicts.",
+            "duration": 35
+          },
+          {
+            "title": "Mediation Techniques",
+            "content": "Approaches for mediating conflicts between others.",
+            "duration": 30
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Robotics Fundamentals",
+    "slug": "robotics-fundamentals",
+    "description": "Introduction to the basics of robotics, including mechanics, electronics, and programming for autonomous systems.",
+    "category": "Robotics",
+    "duration": 40,
+    "level": "Beginner",
+    "price": 69.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-robotics-basics.jpg",
+    "previewVideo": "https://www.youtube.com/embed/jAB3mMgnwjY",
+    "modules": [
+      {
+        "title": "Robot Components",
+        "lessons": [
+          {
+            "title": "Actuators and Sensors",
+            "content": "Understanding different types of actuators and sensors in robotics.",
+            "duration": 45
+          },
+          {
+            "title": "Robot Control Systems",
+            "content": "Introduction to control systems for robots.",
+            "duration": 50
+          }
+        ]
+      },
+      {
+        "title": "Robot Programming",
+        "lessons": [
+          {
+            "title": "Programming with Arduino",
+            "content": "Basic robot programming using Arduino platform.",
+            "duration": 55
+          },
+          {
+            "title": "Simple Autonomous Behaviors",
+            "content": "Programming basic autonomous behaviors like line following.",
+            "duration": 50
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Robot Operating System (ROS)",
+    "slug": "robot-operating-system-ros",
+    "description": "Learn to use ROS for developing complex robotic applications, including navigation, perception, and manipulation.",
+    "category": "Robotics",
+    "duration": 45,
+    "level": "Intermediate",
+    "price": 79.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-ros.jpg",
+    "previewVideo": "https://www.youtube.com/embed/wfDJAYTMTdk",
+    "modules": [
+      {
+        "title": "ROS Basics",
+        "lessons": [
+          {
+            "title": "ROS Architecture",
+            "content": "Understanding the ROS ecosystem and architecture.",
+            "duration": 40
+          },
+          {
+            "title": "Nodes and Topics",
+            "content": "Working with ROS nodes, topics, and messages.",
+            "duration": 45
+          }
+        ]
+      },
+      {
+        "title": "ROS Applications",
+        "lessons": [
+          {
+            "title": "Robot Navigation",
+            "content": "Implementing navigation stacks in ROS.",
+            "duration": 55
+          },
+          {
+            "title": "Computer Vision in ROS",
+            "content": "Using OpenCV with ROS for perception tasks.",
+            "duration": 60
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Computer Vision for Robotics",
+    "slug": "computer-vision-for-robotics",
+    "description": "Application of computer vision techniques in robotics for perception, object recognition, and visual servoing.",
+    "category": "Robotics",
+    "duration": 40,
+    "level": "Advanced",
+    "price": 89.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-cv-robotics.jpg",
+    "previewVideo": "https://www.youtube.com/embed/2FYm3GOonhk",
+    "modules": [
+      {
+        "title": "Vision Fundamentals",
+        "lessons": [
+          {
+            "title": "Camera Calibration",
+            "content": "Techniques for calibrating cameras for robotics applications.",
+            "duration": 40
+          },
+          {
+            "title": "Image Processing",
+            "content": "Basic image processing operations for robotics.",
+            "duration": 45
+          }
+        ]
+      },
+      {
+        "title": "Advanced Vision",
+        "lessons": [
+          {
+            "title": "Object Detection",
+            "content": "Implementing object detection for robotics using deep learning.",
+            "duration": 55
+          },
+          {
+            "title": "Visual SLAM",
+            "content": "Simultaneous Localization and Mapping with visual data.",
+            "duration": 60
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Drone Programming and Control",
+    "slug": "drone-programming-and-control",
+    "description": "Learn to program and control autonomous drones, including flight dynamics, navigation, and mission planning.",
+    "category": "Robotics",
+    "duration": 35,
+    "level": "Intermediate",
+    "price": 74.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-drone.jpg",
+    "previewVideo": "https://www.youtube.com/embed/XNW5FEzlz4g",
+    "modules": [
+      {
+        "title": "Drone Basics",
+        "lessons": [
+          {
+            "title": "Flight Dynamics",
+            "content": "Understanding the physics of drone flight.",
+            "duration": 40
+          },
+          {
+            "title": "Drone Components",
+            "content": "Hardware components of modern drones.",
+            "duration": 35
+          }
+        ]
+      },
+      {
+        "title": "Autonomous Flight",
+        "lessons": [
+          {
+            "title": "Programming with DJI SDK",
+            "content": "Using the DJI SDK for drone programming.",
+            "duration": 50
+          },
+          {
+            "title": "Mission Planning",
+            "content": "Creating autonomous flight missions for drones.",
+            "duration": 45
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Industrial Robotics",
+    "slug": "industrial-robotics",
+    "description": "Study industrial robotic systems, including manipulators, programming, integration, and applications in manufacturing.",
+    "category": "Robotics",
+    "duration": 50,
+    "level": "Advanced",
+    "price": 94.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-industrial-robotics.jpg",
+    "previewVideo": "https://www.youtube.com/embed/jT4XxrP9Cxk",
+    "modules": [
+      {
+        "title": "Industrial Robot Fundamentals",
+        "lessons": [
+          {
+            "title": "Types of Industrial Robots",
+            "content": "Exploring different types and configurations of industrial robots.",
+            "duration": 45
+          },
+          {
+            "title": "Robot Kinematics",
+            "content": "Understanding forward and inverse kinematics for robot arms.",
+            "duration": 55
+          }
+        ]
+      },
+      {
+        "title": "Programming and Integration",
+        "lessons": [
+          {
+            "title": "Robot Programming Languages",
+            "content": "Programming robots with languages like RAPID and KRL.",
+            "duration": 60
+          },
+          {
+            "title": "System Integration",
+            "content": "Integrating robots with other manufacturing systems.",
+            "duration": 50
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Mobile Robot Navigation",
+    "slug": "mobile-robot-navigation",
+    "description": "Advanced techniques for mobile robot navigation, localization, mapping, and path planning in various environments.",
+    "category": "Robotics",
+    "duration": 45,
+    "level": "Advanced",
+    "price": 84.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-robot-navigation.jpg",
+    "previewVideo": "https://www.youtube.com/embed/SXW0RenkQYA",
+    "modules": [
+      {
+        "title": "Robot Localization",
+        "lessons": [
+          {
+            "title": "Probabilistic Localization",
+            "content": "Understanding Bayesian filters for robot localization.",
+            "duration": 50
+          },
+          {
+            "title": "SLAM Fundamentals",
+            "content": "Introduction to Simultaneous Localization and Mapping.",
+            "duration": 55
+          }
+        ]
+      },
+      {
+        "title": "Path Planning",
+        "lessons": [
+          {
+            "title": "Classical Path Planning",
+            "content": "Algorithms like A*, Dijkstra, and RRT for path planning.",
+            "duration": 60
+          },
+          {
+            "title": "Dynamic Path Planning",
+            "content": "Planning paths in dynamic and uncertain environments.",
+            "duration": 55
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Cybersecurity Fundamentals",
+    "slug": "cybersecurity-fundamentals",
+    "description": "Introduction to cybersecurity principles, practices, and techniques for protecting systems and data.",
+    "category": "CSE",
+    "duration": 35,
+    "level": "Beginner",
+    "price": 69.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-cybersecurity.jpg",
+    "previewVideo": "https://www.youtube.com/embed/bPVaOlJ6ln0",
+    "modules": [
+      {
+        "title": "Security Basics",
+        "lessons": [
+          {
+            "title": "Security Principles",
+            "content": "Fundamental principles of information security.",
+            "duration": 35
+          },
+          {
+            "title": "Threat Landscape",
+            "content": "Understanding common cyber threats and actors.",
+            "duration": 40
+          }
+        ]
+      },
+      {
+        "title": "Security Practices",
+        "lessons": [
+          {
+            "title": "Authentication & Authorization",
+            "content": "Implementing strong access control measures.",
+            "duration": 45
+          },
+          {
+            "title": "Security Hygiene",
+            "content": "Best practices for maintaining security in organizations.",
+            "duration": 40
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Database Design and Management",
+    "slug": "database-design-and-management",
+    "description": "Learn to design, implement, and manage databases, including SQL, normalization, and optimization techniques.",
+    "category": "CSE",
+    "duration": 40,
+    "level": "Intermediate",
+    "price": 74.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-database.jpg",
+    "previewVideo": "https://www.youtube.com/embed/h0j0QN2b57M",
+    "modules": [
+      {
+        "title": "Database Design",
+        "lessons": [
+          {
+            "title": "Entity-Relationship Modeling",
+            "content": "Creating ER diagrams for database design.",
+            "duration": 45
+          },
+          {
+            "title": "Normalization",
+            "content": "Database normalization principles and practices.",
+            "duration": 50
+          }
+        ]
+      },
+      {
+        "title": "SQL and Implementation",
+        "lessons": [
+          {
+            "title": "Advanced SQL",
+            "content": "Complex queries, transactions, and stored procedures.",
+            "duration": 55
+          },
+          {
+            "title": "Database Optimization",
+            "content": "Performance tuning and query optimization.",
+            "duration": 50
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "DevOps Practices and Tools",
+    "slug": "devops-practices-and-tools",
+    "description": "Master DevOps methodologies and tools for continuous integration, delivery, and infrastructure as code.",
+    "category": "CSE",
+    "duration": 45,
+    "level": "Intermediate",
+    "price": 79.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-devops.jpg",
+    "previewVideo": "https://www.youtube.com/embed/9pZ2xmsSDdo",
+    "modules": [
+      {
+        "title": "DevOps Fundamentals",
+        "lessons": [
+          {
+            "title": "DevOps Culture and Principles",
+            "content": "Understanding the DevOps philosophy and approach.",
+            "duration": 40
+          },
+          {
+            "title": "CI/CD Pipeline Concepts",
+            "content": "Introduction to continuous integration and delivery.",
+            "duration": 45
+          }
+        ]
+      },
+      {
+        "title": "DevOps Tools",
+        "lessons": [
+          {
+            "title": "Docker and Containerization",
+            "content": "Using Docker for application deployment.",
+            "duration": 55
+          },
+          {
+            "title": "Infrastructure as Code",
+            "content": "Using Terraform and Ansible for infrastructure management.",
+            "duration": 60
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Blockchain Technology",
+    "slug": "blockchain-technology",
+    "description": "Comprehensive introduction to blockchain technology, cryptocurrencies, smart contracts, and decentralized applications.",
+    "category": "CSE",
+    "duration": 40,
+    "level": "Intermediate",
+    "price": 84.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-blockchain.jpg",
+    "previewVideo": "https://www.youtube.com/embed/SSo_EIwHSd4",
+    "modules": [
+      {
+        "title": "Blockchain Fundamentals",
+        "lessons": [
+          {
+            "title": "Distributed Ledger Technology",
+            "content": "Understanding the core concepts of distributed ledgers.",
+            "duration": 45
+          },
+          {
+            "title": "Consensus Mechanisms",
+            "content": "Exploring Proof of Work, Proof of Stake, and other consensus algorithms.",
+            "duration": 50
+          }
+        ]
+      },
+      {
+        "title": "Smart Contracts",
+        "lessons": [
+          {
+            "title": "Introduction to Ethereum",
+            "content": "Understanding the Ethereum blockchain and ecosystem.",
+            "duration": 55
+          },
+          {
+            "title": "Solidity Programming",
+            "content": "Creating smart contracts with Solidity.",
+            "duration": 60
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Internet of Medical Things (IoMT)",
+    "slug": "internet-of-medical-things",
+    "description": "Explore applications of IoT in healthcare, including medical device integration, patient monitoring, and health data analytics.",
+    "category": "IoT",
+    "duration": 35,
+    "level": "Advanced",
+    "price": 89.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-iomt.jpg",
+    "previewVideo": "https://www.youtube.com/embed/a9PgEU_91xM",
+    "modules": [
+      {
+        "title": "IoMT Fundamentals",
+        "lessons": [
+          {
+            "title": "Medical Device Integration",
+            "content": "Connecting and integrating medical devices in IoT systems.",
+            "duration": 45
+          },
+          {
+            "title": "Healthcare Data Security",
+            "content": "Security and privacy considerations for health data.",
+            "duration": 50
+          }
+        ]
+      },
+      {
+        "title": "Medical Applications",
+        "lessons": [
+          {
+            "title": "Remote Patient Monitoring",
+            "content": "Implementing IoT solutions for remote healthcare.",
+            "duration": 55
+          },
+          {
+            "title": "Healthcare Analytics",
+            "content": "Processing and analyzing medical data from IoT devices.",
+            "duration": 50
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "IoT Security",
+    "slug": "iot-security",
+    "description": "Learn strategies and techniques for securing IoT devices, networks, and data against various cyber threats.",
+    "category": "IoT",
+    "duration": 40,
+    "level": "Intermediate",
+    "price": 79.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-iot-security.jpg",
+    "previewVideo": "https://www.youtube.com/embed/4YN70Ks1PNw",
+    "modules": [
+      {
+        "title": "IoT Security Challenges",
+        "lessons": [
+          {
+            "title": "IoT Attack Vectors",
+            "content": "Understanding common attack vectors in IoT systems.",
+            "duration": 45
+          },
+          {
+            "title": "Device Vulnerabilities",
+            "content": "Identifying and addressing vulnerabilities in IoT devices.",
+            "duration": 40
+          }
+        ]
+      },
+      {
+        "title": "Security Implementation",
+        "lessons": [
+          {
+            "title": "Secure Communication",
+            "content": "Implementing secure communication protocols for IoT.",
+            "duration": 50
+          },
+          {
+            "title": "IoT Security Architecture",
+            "content": "Designing secure IoT systems from the ground up.",
+            "duration": 55
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Edge Computing for IoT",
+    "slug": "edge-computing-for-iot",
+    "description": "Explore the implementation of edge computing in IoT systems to reduce latency and bandwidth usage.",
+    "category": "IoT",
+    "duration": 45,
+    "level": "Advanced",
+    "price": 84.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-edge-computing.jpg",
+    "previewVideo": "https://www.youtube.com/embed/cEOUcG-cbMo",
+    "modules": [
+      {
+        "title": "Edge Computing Fundamentals",
+        "lessons": [
+          {
+            "title": "Edge vs. Cloud Computing",
+            "content": "Comparing edge and cloud approaches for IoT systems.",
+            "duration": 40
+          },
+          {
+            "title": "Edge Infrastructure",
+            "content": "Understanding edge infrastructure components and architecture.",
+            "duration": 45
+          }
+        ]
+      },
+      {
+        "title": "Edge Implementation",
+        "lessons": [
+          {
+            "title": "Edge Processing",
+            "content": "Implementing data processing at the edge.",
+            "duration": 55
+          },
+          {
+            "title": "Edge-Cloud Integration",
+            "content": "Creating hybrid edge-cloud architectures for IoT.",
+            "duration": 50
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Wearable Technology Development",
+    "slug": "wearable-technology-development",
+    "description": "Learn to design, develop, and program wearable technology devices for fitness, health, and productivity applications.",
+    "category": "Embedded Systems",
+    "duration": 35,
+    "level": "Intermediate",
+    "price": 74.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-wearables.jpg",
+    "previewVideo": "https://www.youtube.com/embed/Ajl-2CBYbP0",
+    "modules": [
+      {
+        "title": "Wearable Hardware",
+        "lessons": [
+          {
+            "title": "Wearable Components",
+            "content": "Understanding sensors and components for wearable devices.",
+            "duration": 40
+          },
+          {
+            "title": "Form Factor Design",
+            "content": "Designing ergonomic and practical wearable form factors.",
+            "duration": 35
+          }
+        ]
+      },
+      {
+        "title": "Wearable Software",
+        "lessons": [
+          {
+            "title": "Low-Power Programming",
+            "content": "Creating energy-efficient software for wearable devices.",
+            "duration": 45
+          },
+          {
+            "title": "Data Collection and Analysis",
+            "content": "Processing and analyzing data from wearable sensors.",
+            "duration": 50
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Embedded Linux",
+    "slug": "embedded-linux",
+    "description": "Master the implementation of Linux in embedded systems, including customization, device drivers, and system optimization.",
+    "category": "Embedded Systems",
+    "duration": 50,
+    "level": "Advanced",
+    "price": 89.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-embedded-linux.jpg",
+    "previewVideo": "https://www.youtube.com/embed/9vsu67uMcko",
+    "modules": [
+      {
+        "title": "Linux for Embedded Systems",
+        "lessons": [
+          {
+            "title": "Building Custom Linux",
+            "content": "Creating customized Linux distributions for embedded devices.",
+            "duration": 55
+          },
+          {
+            "title": "Bootloaders",
+            "content": "Understanding and configuring bootloaders like U-Boot.",
+            "duration": 50
+          }
+        ]
+      },
+      {
+        "title": "Embedded Linux Development",
+        "lessons": [
+          {
+            "title": "Device Drivers",
+            "content": "Writing device drivers for embedded Linux systems.",
+            "duration": 60
+          },
+          {
+            "title": "System Optimization",
+            "content": "Optimizing Linux systems for resource-constrained devices.",
+            "duration": 55
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Low-Power Embedded Design",
+    "slug": "low-power-embedded-design",
+    "description": "Techniques and strategies for designing ultra-low power embedded systems for battery-operated and energy-harvesting applications.",
+    "category": "Embedded Systems",
+    "duration": 40,
+    "level": "Advanced",
+    "price": 84.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-low-power.jpg",
+    "previewVideo": "https://www.youtube.com/embed/8MOqHMOrfLM",
+    "modules": [
+      {
+        "title": "Power Management",
+        "lessons": [
+          {
+            "title": "Low-Power Hardware Design",
+            "content": "Designing hardware for minimal power consumption.",
+            "duration": 45
+          },
+          {
+            "title": "Power Supply Considerations",
+            "content": "Battery selection, energy harvesting, and power regulation.",
+            "duration": 40
+          }
+        ]
+      },
+      {
+        "title": "Low-Power Programming",
+        "lessons": [
+          {
+            "title": "Sleep Modes and Power States",
+            "content": "Utilizing processor sleep modes effectively.",
+            "duration": 50
+          },
+          {
+            "title": "Energy-Aware Algorithms",
+            "content": "Developing algorithms optimized for energy efficiency.",
+            "duration": 45
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Emotional Intelligence in the Workplace",
+    "slug": "emotional-intelligence-workplace",
+    "description": "Develop emotional intelligence skills to enhance workplace relationships, leadership effectiveness, and personal well-being.",
+    "category": "Skill Development",
+    "duration": 25,
+    "level": "Beginner",
+    "price": 59.99,
+    "isPublished": true,
+    "thumbnail": "/uploads/thumbnail-emotional-intelligence.jpg",
+    "previewVideo": "https://www.youtube.com/embed/WHJ3C6XwJCc",
+    "modules": [
+      {
+        "title": "Understanding Emotional Intelligence",
+        "lessons": [
+          {
+            "title": "EI Framework",
+            "content": "Understanding the components of emotional intelligence.",
+            "duration": 30
+          },
+          {
+            "title": "Self-Awareness",
+            "content": "Developing awareness of your own emotions and triggers.",
+            "duration": 35
+          }
+        ]
+      },
+      {
+        "title": "EI in Practice",
+        "lessons": [
+          {
+            "title": "Managing Emotions",
+            "content": "Techniques for managing emotions in challenging situations.",
+            "duration": 40
+          },
+          {
+            "title": "Social Intelligence",
+            "content": "Building empathy and social skills in workplace settings.",
+            "duration": 35
+          }
+        ]
+      }
+    ]
+  }
+]

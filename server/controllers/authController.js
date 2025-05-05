@@ -1,19 +1,30 @@
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
+import logger from '../utils/logger.js';
 
 // Generate JWT token
 const generateToken = (user) => {
-  return jwt.sign(
-    { id: user._id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: '7d' }
-  );
+  try {
+    return jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET || 'fallback_secret_do_not_use_in_production',
+      { expiresIn: '7d' }
+    );
+  } catch (error) {
+    logger.error('Error generating token:', error);
+    throw new Error('Could not generate authentication token');
+  }
 };
 
 // Register a new user
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
+    
+    // Validate required fields
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Please provide all required fields' });
+    }
     
     // Check if user already exists
     const userExists = await User.findOne({ email });
@@ -33,20 +44,28 @@ export const registerUser = async (req, res) => {
     if (user) {
       const token = generateToken(user);
       
+      // Log the registration
+      logger.info(`New user registered: ${user.email}`, {
+        userId: user._id,
+        role: user.role
+      });
+      
       res.status(201).json({
         token,
         user: {
           id: user._id,
           name: user.name,
           email: user.email,
-          role: user.role
+          role: user.role,
+          profileImage: user.profileImage
         }
       });
     } else {
       res.status(400).json({ message: 'Invalid user data' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    logger.error('Error in registerUser:', error);
+    res.status(500).json({ message: 'Server error during registration', error: error.message });
   }
 };
 
@@ -55,41 +74,73 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     
-    // Find user by email
-    const user = await User.findOne({ email });
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Please provide email and password' });
+    }
     
-    // Check if user exists and password matches
-    if (user && (await user.comparePassword(password))) {
+    // Find user by email
+    const user = await User.findOne({ email }).select('+password');
+    
+    if (!user) {
+      logger.warn(`Login attempt with non-existent email: ${email}`);
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+    
+    // Check if password matches
+    const isMatch = await user.comparePassword(password);
+    
+    if (isMatch) {
       const token = generateToken(user);
       
-      res.json({
+      // Log successful login
+      logger.info(`User logged in: ${user.email}`, {
+        userId: user._id,
+        role: user.role
+      });
+      
+      // Return response without password
+      const userResponse = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profileImage: user.profileImage || null
+      };
+      
+      return res.json({
         token,
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role
-        }
+        user: userResponse
       });
     } else {
-      res.status(401).json({ message: 'Invalid email or password' });
+      // Log failed login attempt
+      logger.warn(`Failed login attempt for user: ${email}`, { userId: user._id });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    logger.error('Error in loginUser:', error);
+    return res.status(500).json({ message: 'Server error during login', error: error.message });
   }
 };
 
 // Get current user profile
 export const getCurrentUser = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).json({ message: 'User not found' });
+    // Make sure req.user exists
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: 'Authentication required' });
     }
+    
+    const user = await User.findById(req.user.id).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    res.json(user);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    logger.error('Error in getCurrentUser:', error);
+    res.status(500).json({ message: 'Server error while retrieving profile', error: error.message });
   }
 };
 
@@ -113,6 +164,12 @@ export const updateProfile = async (req, res) => {
     // Save the updated user
     await user.save();
     
+    // Log profile update
+    logger.info(`User profile updated: ${user.email}`, {
+      userId: user._id,
+      updates: Object.keys(req.body)
+    });
+    
     res.json({
       message: "Profile updated successfully",
       user: {
@@ -120,11 +177,13 @@ export const updateProfile = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        profileImage: user.profileImage,
         createdAt: user.createdAt
       }
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    logger.error('Error in updateProfile:', error);
+    res.status(500).json({ message: "Server error during profile update", error: error.message });
   }
 };
 
@@ -133,8 +192,12 @@ export const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
     
-    // Find user
-    const user = await User.findById(req.user._id);
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "Both current and new passwords are required" });
+    }
+    
+    // Find user with password
+    const user = await User.findById(req.user._id).select('+password');
     
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -152,8 +215,32 @@ export const changePassword = async (req, res) => {
     // Save the updated user (password will be hashed via pre-save hook)
     await user.save();
     
+    // Log password change
+    logger.info(`User password changed: ${user.email}`, {
+      userId: user._id
+    });
+    
     res.json({ message: "Password changed successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    logger.error('Error in changePassword:', error);
+    res.status(500).json({ message: "Server error during password change", error: error.message });
+  }
+};
+
+// Logout user
+export const logoutUser = async (req, res) => {
+  try {
+    // For client-side logout, we don't need to do much on the server
+    // Just log the event if we have user info
+    if (req.user) {
+      logger.info(`User logged out: ${req.user.email}`, {
+        userId: req.user._id
+      });
+    }
+    
+    res.json({ message: 'Logged out successfully' });
+  } catch (error) {
+    logger.error('Error in logoutUser:', error);
+    res.status(500).json({ message: 'Server error during logout', error: error.message });
   }
 };

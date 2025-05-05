@@ -91,9 +91,34 @@ export const updateCourse = createAsyncThunk(
   }
 );
 
+export const fetchInstructorCourses = createAsyncThunk(
+  'courses/fetchInstructorCourses',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth;
+      
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      
+      const { data } = await axios.get('/api/courses/instructor/courses', config);
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      );
+    }
+  }
+);
+
 const initialState = {
   courses: [],
   course: null,
+  instructorCourses: [],
   loading: false,
   error: null,
   success: false,
@@ -116,6 +141,7 @@ const courseSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Fetch all courses
       .addCase(fetchCourses.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -127,6 +153,65 @@ const courseSlice = createSlice({
         state.currentPage = action.payload.currentPage;
       })
       .addCase(fetchCourses.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch course details
+      .addCase(fetchCourseDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCourseDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.course = action.payload;
+      })
+      .addCase(fetchCourseDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Create course
+      .addCase(createCourse.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(createCourse.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(createCourse.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Update course
+      .addCase(updateCourse.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(updateCourse.fulfilled, (state, action) => {
+        state.loading = false;
+        state.course = action.payload;
+        state.success = true;
+      })
+      .addCase(updateCourse.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Fetch instructor courses
+      .addCase(fetchInstructorCourses.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchInstructorCourses.fulfilled, (state, action) => {
+        state.loading = false;
+        state.instructorCourses = action.payload;
+      })
+      .addCase(fetchInstructorCourses.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

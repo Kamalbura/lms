@@ -1,63 +1,111 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../redux/slices/authSlice';
+import { register, clearError } from '../redux/slices/authSlice';
 import Loader from '../components/Loader';
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [formError, setFormError] = useState('');
+  const [submitAttempted, setSubmitAttempted] = useState(false);
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const { loading, error } = useSelector(state => state.auth);
+  const { loading, error, isAuthenticated } = useSelector(state => state.auth);
+  
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      toast.success('Registration successful!');
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Handle API errors
+  useEffect(() => {
+    if (error) {
+      setFormError(error);
+      toast.error(error);
+      // Clear the error after 5 seconds
+      const timer = setTimeout(() => {
+        dispatch(clearError());
+        setFormError('');
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [error, dispatch]);
   
   const validateForm = () => {
-    setPasswordError('');
+    setFormError('');
+    let isValid = true;
     
-    if (password !== confirmPassword) {
-      setPasswordError('Passwords do not match');
-      return false;
+    if (!name.trim()) {
+      setFormError('Name is required');
+      isValid = false;
+    } else if (!email.trim()) {
+      setFormError('Email is required');
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setFormError('Please enter a valid email address');
+      isValid = false;
+    } else if (!password) {
+      setFormError('Password is required');
+      isValid = false;
+    } else if (password.length < 6) {
+      setFormError('Password must be at least 6 characters');
+      isValid = false;
+    } else if (password !== confirmPassword) {
+      setFormError('Passwords do not match');
+      isValid = false;
     }
     
-    if (password.length < 6) {
-      setPasswordError('Password must be at least 6 characters');
-      return false;
-    }
-    
-    return true;
+    return isValid;
   };
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitAttempted(true);
     
     if (!validateForm()) return;
     
-    // Dispatch register action
-    const resultAction = await dispatch(register({ name, email, password }));
-    
-    if (register.fulfilled.match(resultAction)) {
-      navigate('/dashboard');
+    try {
+      await dispatch(register({ name, email, password })).unwrap();
+      // Success handling is in the useEffect above
+    } catch (err) {
+      // Error handling is in the useEffect above
+      console.error('Registration failed:', err);
     }
   };
   
   return (
-    <div className="container mx-auto px-4 py-8 max-w-md">
-      <div className="bg-white shadow rounded-lg p-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Create Account</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-6 rounded-lg shadow-md">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Create a new account
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Or{' '}
+            <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
+              sign in to your existing account
+            </Link>
+          </p>
+        </div>
         
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-            <p>{error}</p>
+        {formError && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            <p>{formError}</p>
           </div>
         )}
         
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit} noValidate>
+          <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
               Full Name
             </label>
@@ -66,12 +114,18 @@ const Register = () => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              className={`w-full px-3 py-2 border ${
+                submitAttempted && !name ? 'border-red-300' : 'border-gray-300'
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              disabled={loading}
               required
             />
+            {submitAttempted && !name && (
+              <p className="mt-1 text-sm text-red-600">Name is required</p>
+            )}
           </div>
           
-          <div className="mb-4">
+          <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email Address
             </label>
@@ -80,12 +134,18 @@ const Register = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              className={`w-full px-3 py-2 border ${
+                submitAttempted && !email ? 'border-red-300' : 'border-gray-300'
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              disabled={loading}
               required
             />
+            {submitAttempted && !email && (
+              <p className="mt-1 text-sm text-red-600">Email is required</p>
+            )}
           </div>
           
-          <div className="mb-4">
+          <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
@@ -94,12 +154,18 @@ const Register = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              className={`w-full px-3 py-2 border ${
+                submitAttempted && !password ? 'border-red-300' : 'border-gray-300'
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              disabled={loading}
               required
             />
+            {submitAttempted && !password && (
+              <p className="mt-1 text-sm text-red-600">Password is required</p>
+            )}
           </div>
           
-          <div className="mb-6">
+          <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
               Confirm Password
             </label>
@@ -108,18 +174,21 @@ const Register = () => {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              className={`w-full px-3 py-2 border ${
+                submitAttempted && password && !confirmPassword ? 'border-red-300' : 'border-gray-300'
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              disabled={loading}
               required
             />
-            {passwordError && (
-              <p className="mt-1 text-sm text-red-600">{passwordError}</p>
+            {submitAttempted && password && !confirmPassword && (
+              <p className="mt-1 text-sm text-red-600">Please confirm your password</p>
             )}
           </div>
           
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-blue-300"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-blue-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             {loading ? 'Creating Account...' : 'Register'}
           </button>

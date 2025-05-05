@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast'; // Add this import
 
 const TakeAssessment = () => {
   const { assessmentId } = useParams();
@@ -55,7 +56,10 @@ const TakeAssessment = () => {
     
     if (timeLeft <= 0) {
       // Auto-submit when time is up
-      handleSubmit();
+      handleSubmit().catch(error => {
+        console.error("Failed to auto-submit assessment:", error);
+        toast.error("Failed to submit your assessment. Please try again.");
+      });
       return;
     }
     
@@ -64,8 +68,8 @@ const TakeAssessment = () => {
     }, 1000);
     
     return () => clearTimeout(timer);
-  }, [timeLeft]);
-  
+  }, [timeLeft, handleSubmit]); // Include handleSubmit in dependencies
+
   // Format time for display
   const formatTime = (seconds) => {
     const hrs = Math.floor(seconds / 3600);

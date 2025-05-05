@@ -7,7 +7,7 @@ import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import connectDB from './config/db.js';
+import connectDB, { closeConnection } from './config/db.js';
 import logger from './utils/logger.js';
 import authRoutes from './routes/authRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
@@ -15,18 +15,66 @@ import enrollRoutes from './routes/enrollRoutes.js';
 import configRoutes from './routes/configRoutes.js';
 import assessmentRoutes from './routes/assessmentRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import officeHourRoutes from './routes/officeHourRoutes.js';
 import { protect, restrictTo } from './middleware/authMiddleware.js';
+import configureSocketServer from './socketServer.js';
+import { errorHandler, notFound } from './middleware/errorMiddleware.js';
+import http from 'http';
+import { Server } from 'socket.io';
+import WebRTCSignalingServer from './utils/webrtc.js';
 
 // Initialize environment variables
 dotenv.config();
 
 // Connect to MongoDB
-connectDB();
+const connection = await connectDB();
 
 const app = express();
 
+// Create HTTP server and Socket.io server
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : true,
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
+});
+
+// Initialize WebRTC signaling server
+const webRTCServer = new WebRTCSignalingServer(server);
+
+// Socket.io connection handling
+io.on('connection', socket => {
+  logger.info(`User connected: ${socket.id}`);
+  
+  // Join course room for chat
+  socket.on('join:course', ({ courseId }) => {
+    socket.join(`course:${courseId}`);
+    logger.info(`User ${socket.id} joined course chat: ${courseId}`);
+  });
+  
+  // Send message to course chat
+  socket.on('message:course', (message) => {
+    io.to(`course:${message.courseId}`).emit('message:course', message);
+  });
+  
+  // Typing indicators
+  socket.on('typing:start:course', (data) => {
+    socket.to(`course:${data.courseId}`).emit('typing:start:course', data);
+  });
+  
+  socket.on('typing:stop:course', (data) => {
+    socket.to(`course:${data.courseId}`).emit('typing:stop:course', data);
+  });
+  
+  // Handle disconnect
+  socket.on('disconnect', () => {
+    logger.info(`User disconnected: ${socket.id}`);
+  });
+});
+
 // Enhanced Middleware Configuration
-// Security headers
 app.use(helmet());
 
 // Enable CORS with various options
@@ -67,25 +115,18 @@ app.use('/api/courses', courseRoutes);
 app.use('/api/enroll', enrollRoutes);
 app.use('/api/config', configRoutes);
 app.use('/api/assessments', assessmentRoutes);
-app.use('/api/uploads', uploadRoutes); // Add the upload routes
-
-// Serve static assets if in production
-if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  app.use(express.static(path.join(__dirname, '../client/build')));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
-  });
-} else {
-  app.get('/', (req, res) => {
-    res.send('API is running...');
-  });
-}
+app.use('/api/uploads', uploadRoutes);
+app.use('/api/officehours', officeHourRoutes);
 
 // Health check and test routes
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', message: 'System is healthy' });
+  res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    webrtc: {
+      activeRooms: webRTCServer.getActiveRoomCount()
+    }
+  });
 });
 
 // Protected route examples
@@ -101,51 +142,30 @@ app.get('/api/instructor', protect, restrictTo('instructor', 'admin'), (req, res
   res.json({ message: 'Instructor access granted', user: req.user });
 });
 
-// Root route
-app.get('/', (req, res) => {
-  res.json({ message: 'ProLearn API is running 🚀' });
-});
+// Serve static assets if in production
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static(path.join(__dirname, '../client/build')));
 
-// Handle 404 errors
-app.use('*', (req, res) => {
-  res.status(404).json({
-    status: 'fail',
-    message: `Can't find ${req.originalUrl} on this server!`
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
   });
-});
+} else {
+  // Root route (only used in development)
+  app.get('/', (req, res) => {
+    res.json({ message: 'ProLearn API is running 🚀' });
+  });
+}
 
-// Global error handling middleware
-app.use((err, req, res, next) => {
-  logger.error(`${err.name}: ${err.message}`, { error: err });
-  
-  // Handle specific error types
-  if (err.name === 'ValidationError') {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Validation Error',
-      errors: err.errors
-    });
-  }
-  
-  if (err.code === 11000) {
-    return res.status(400).json({
-      status: 'error',
-      message: 'Duplicate field value',
-      field: Object.keys(err.keyValue)[0]
-    });
-  }
-  
-  // Default error response
-  res.status(err.statusCode || 500).json({
-    status: err.status || 'error',
-    message: err.message || 'Internal Server Error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
-});
+// 404 Error for unmatched routes - must be after all defined routes
+app.use(notFound);
+
+// Error handling middleware (must be after all routes)
+app.use(errorHandler);
 
 // Start server
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   logger.info(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
 
@@ -163,6 +183,33 @@ process.on('uncaughtException', (err) => {
   logger.error('UNCAUGHT EXCEPTION! 💥 Shutting down...');
   logger.error(err.name, err.message);
   process.exit(1);
+});
+
+// Handle graceful shutdown
+process.on('SIGINT', async () => {
+  logger.info('SIGINT signal received: closing HTTP server');
+  server.close(() => {
+    logger.info('HTTP server closed');
+  });
+  
+  if (connection) {
+    await closeConnection();
+  }
+  
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  logger.info('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    logger.info('HTTP server closed');
+  });
+  
+  if (connection) {
+    await closeConnection();
+  }
+  
+  process.exit(0);
 });
 
 export default app;
