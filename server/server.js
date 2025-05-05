@@ -7,8 +7,11 @@ import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import http from 'http';
 import connectDB from './config/db.js';
 import logger from './utils/logger.js';
+import configureSocketServer from './socketServer.js';
+import WebRTCSignalingServer from './utils/webrtc.js';
 import authRoutes from './routes/authRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
 import enrollRoutes from './routes/enrollRoutes.js';
@@ -100,7 +103,31 @@ export default app;
 // Only listen on a port if not in serverless environment
 if (process.env.NODE_ENV !== 'vercel') {
   const PORT = process.env.PORT || 5000;
-  const server = app.listen(PORT, () => {
+  
+  // Create HTTP server using Express app
+  const server = http.createServer(app);
+  
+  // Set up Socket.IO with the HTTP server
+  const io = configureSocketServer(server);
+  
+  // Set up WebRTC signaling server
+  const webRTCServer = new WebRTCSignalingServer(server);
+  
+  // Start listening on the port with HTTP server (instead of Express app)
+  server.listen(PORT, () => {
     logger.info(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    logger.info('WebSocket server initialized');
   });
+  
+  // Handle graceful shutdown
+  const handleShutdown = async () => {
+    logger.info('Shutting down server...');
+    server.close(() => {
+      logger.info('HTTP/WebSocket server closed');
+      process.exit(0);
+    });
+  };
+  
+  process.on('SIGINT', handleShutdown);
+  process.on('SIGTERM', handleShutdown);
 }

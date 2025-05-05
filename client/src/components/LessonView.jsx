@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const LessonView = ({ course, enrollment }) => {
+const LessonView = ({ course, enrollment, onProgressUpdate, onCourseCompleted }) => {
   const { token } = useSelector(state => state.auth);
   const [expandedModule, setExpandedModule] = useState(0);
   const [completedLessons, setCompletedLessons] = useState([]);
@@ -33,8 +33,23 @@ const LessonView = ({ course, enrollment }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
+      // Update both the completedLessons state and the enrollment state
       setCompletedLessons(data.enrollment.completedLessons);
+      
+      // If parent component provides an onProgressUpdate handler, call it
+      if (onProgressUpdate) {
+        onProgressUpdate(data.enrollment);
+      }
+      
       toast.success(isCompleted ? 'Lesson marked as incomplete' : 'Lesson marked as complete!');
+      
+      // If this was the last lesson and course is now complete, show celebration
+      if (data.enrollment.progress === 100 && !isCompleted) {
+        // Trigger celebration in parent component if available
+        if (onCourseCompleted) {
+          onCourseCompleted();
+        }
+      }
       
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to update lesson status');

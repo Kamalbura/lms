@@ -36,14 +36,14 @@ module.exports = {
         'slide-up': 'slideUp 0.4s ease-out',
         'slide-down': 'slideDown 0.4s ease-out',
         'slide-in-right': 'slideInRight 0.4s ease-out',
-        'bounce-subtle': 'bounce 1s ease-in-out infinite',
+        'bounce-subtle': 'bounceSubtle 1s ease-in-out infinite',
         'pulse-subtle': 'pulseSubtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'shimmer': 'shimmer 2.2s linear infinite',
         'scale': 'scale 0.2s ease-in-out',
         'float': 'float 3s ease-in-out infinite',
-        'fade-out': 'fade-out 0.3s ease-out',
-        'scale-in': 'scale-in 0.3s ease-out',
-        'scale-out': 'scale-out 0.3s ease-out',
+        'fade-out': 'fadeOut 0.3s ease-out',
+        'scale-in': 'scaleIn 0.3s ease-out',
+        'scale-out': 'scaleOut 0.3s ease-out',
         'fade-in-up': 'fadeInUp 0.3s ease-out',
         'fade-out-down': 'fadeOutDown 0.3s ease-out',
         'bounce-in': 'bounceIn 0.5s ease-out',
@@ -83,26 +83,20 @@ module.exports = {
         shimmer: {
           '0%': { backgroundPosition: '-1000px 0' },
           '100%': { backgroundPosition: '1000px 0' },
-          '100%': { transform: 'translateX(100%)' },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-5px)' },
           '50%': { transform: 'translateY(-10px)' },
         },
-        'fade-in': {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        'fade-out': {
+        fadeOut: {
           '0%': { opacity: '1' },
           '100%': { opacity: '0' },
         },
-        'scale-in': {
+        scaleIn: {
           '0%': { transform: 'scale(0.95)', opacity: '0' },
           '100%': { transform: 'scale(1)', opacity: '1' },
         },
-        'scale-out': {
+        scaleOut: {
           '0%': { transform: 'scale(1)', opacity: '1' },
           '100%': { transform: 'scale(0.95)', opacity: '0' },
         },
@@ -173,9 +167,6 @@ module.exports = {
         },
         '.text-shadow-md': {
           'text-shadow': '0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08)',
-        },
-        '.shadow-soft': {
-          'box-shadow': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
         },
       };
 

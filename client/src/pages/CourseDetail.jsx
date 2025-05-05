@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import LessonView from '../components/LessonView';
-import MediaDisplay from '../components/MediaDisplay';
 import ImageWithFallback from '../components/ImageWithFallback';
 import CourseChat from '../components/CourseChat';
 import CompletionCelebration from '../components/CompletionCelebration';
+import toast from 'react-hot-toast';
 
 const CourseDetail = () => {
   const { slug } = useParams();
@@ -16,8 +16,10 @@ const CourseDetail = () => {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [enrollment, setEnrollment] = useState(null);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [expandedModule, setExpandedModule] = useState(null);
   
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, token, isAuthenticated } = useSelector(state => state.auth);
 
   // Check if course was just completed
@@ -78,6 +80,45 @@ const CourseDetail = () => {
     }
   }, [slug, token, isAuthenticated, isEnrolled, course]);
 
+  useEffect(() => {
+    // Check if we're coming from dashboard with specific lesson to resume
+    if (location.state?.fromDashboard && course) {
+      const enrollmentId = location.state.enrollmentId;
+      
+      // Scroll to course content section
+      const contentElement = document.getElementById('course-content');
+      if (contentElement) {
+        contentElement.scrollIntoView({ behavior: 'smooth' });
+        
+        // Find the first incomplete lesson if available
+        if (enrollment?.completedLessons && course.modules) {
+          let foundIncomplete = false;
+          
+          // Expand the first module with incomplete lessons
+          for (let i = 0; i < course.modules.length; i++) {
+            const module = course.modules[i];
+            const moduleLessons = module.lessons || [];
+            
+            for (const lesson of moduleLessons) {
+              if (!enrollment.completedLessons.includes(lesson._id)) {
+                setExpandedModule(i); // Expand this module
+                foundIncomplete = true;
+                break;
+              }
+            }
+            
+            if (foundIncomplete) break;
+          }
+          
+          // If everything is complete, just expand the first module
+          if (!foundIncomplete && course.modules.length > 0) {
+            setExpandedModule(0);
+          }
+        }
+      }
+    }
+  }, [location.state, course, enrollment]);
+
   const handleEnroll = async () => {
     if (!isAuthenticated) {
       navigate('/login', { state: { from: `/course/${slug}` } });
@@ -90,11 +131,22 @@ const CourseDetail = () => {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      
+      // Instead of redirecting to dashboard, stay on course page and update enrollment state
       setIsEnrolled(true);
-      // Optionally redirect to course content page
-      navigate('/dashboard');
+      
+      // Fetch enrollment details to show progress UI
+      const { data: enrollmentData } = await axios.get(
+        `/api/enroll/${course._id}/details`, 
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setEnrollment(enrollmentData);
+      
+      toast.success('Successfully enrolled in this course!');
+      
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to enroll');
+      toast.error(err.response?.data?.message || 'Failed to enroll');
     }
   };
 
@@ -174,7 +226,7 @@ const CourseDetail = () => {
           </div>
           
           {isEnrolled && (
-            <div className="mt-8">
+            <div className="mt-8" id="course-content">
               <h2 className="text-2xl font-bold mb-4">Course Content</h2>
               
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">

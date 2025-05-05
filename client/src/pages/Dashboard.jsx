@@ -315,6 +315,11 @@ const Dashboard = () => {
                     
                     <Link
                       to={`/course/${enrollment.course.slug}`}
+                      state={{ 
+                        fromDashboard: true,
+                        enrollmentId: enrollment._id,
+                        lastAccessed: enrollment.lastAccessed
+                      }}
                       className="block w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-center rounded-lg transition-colors"
                     >
                       {enrollment.progress === 100 ? 'Review Course' : 'Continue Learning'}
