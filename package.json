@@ -13,7 +13,8 @@
     "install-all": "npm install && npm run install-client && npm run install-server",
     "clean-install": "rm -rf node_modules && rm -rf client/node_modules && rm -rf server/node_modules && npm run install-all",
     "seed:courses": "node server/seeds/courseSeeder.js",
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install && npm run build",
+    "vercel-build": "npm run install-server && npm run build"
   },
   "keywords": [
     "lms",
