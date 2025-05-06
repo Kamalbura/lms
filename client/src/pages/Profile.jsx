@@ -105,7 +105,7 @@ const Profile = () => {
     try {
       setUploadingImage(true);
       
-      const { data } = await axios.post('/api/auth/upload-avatar', formData, {
+      await axios.post('/api/auth/upload-avatar', formData, {
         headers: { 
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'

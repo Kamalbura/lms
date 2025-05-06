@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -16,6 +16,34 @@ const TakeAssessment = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  
+  // Submit assessment - defined with useCallback before useEffect uses it
+  const handleSubmit = useCallback(async () => {
+    try {
+      setSubmitting(true);
+      
+      // Calculate time taken in minutes
+      const timeTaken = Math.round((Date.now() - startTime) / (1000 * 60));
+      
+      // Format answers array
+      const formattedAnswers = Object.values(answers);
+      
+      await axios.post(
+        `/api/assessments/submit/${assessmentId}`,
+        { 
+          answers: formattedAnswers,
+          timeTaken
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      // Redirect to dashboard or results page
+      navigate('/my-submissions');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to submit assessment');
+      setSubmitting(false);
+    }
+  }, [assessmentId, answers, navigate, startTime, token]);
   
   // Fetch assessment
   useEffect(() => {
@@ -68,7 +96,7 @@ const TakeAssessment = () => {
     }, 1000);
     
     return () => clearTimeout(timer);
-  }, [timeLeft, handleSubmit]); // Include handleSubmit in dependencies
+  }, [timeLeft, handleSubmit]); // Now handleSubmit is properly included in dependencies
 
   // Format time for display
   const formatTime = (seconds) => {
@@ -91,34 +119,6 @@ const TakeAssessment = () => {
     if (index !== undefined) {
       updatedAnswers[index].answer = value;
       setAnswers(updatedAnswers);
-    }
-  };
-  
-  // Submit assessment
-  const handleSubmit = async () => {
-    try {
-      setSubmitting(true);
-      
-      // Calculate time taken in minutes
-      const timeTaken = Math.round((Date.now() - startTime) / (1000 * 60));
-      
-      // Format answers array
-      const formattedAnswers = Object.values(answers);
-      
-      await axios.post(
-        `/api/assessments/submit/${assessmentId}`,
-        { 
-          answers: formattedAnswers,
-          timeTaken
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
-      // Redirect to dashboard or results page
-      navigate('/my-submissions');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to submit assessment');
-      setSubmitting(false);
     }
   };
   

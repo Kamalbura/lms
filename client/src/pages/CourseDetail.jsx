@@ -92,8 +92,6 @@ const CourseDetail = () => {
   useEffect(() => {
     // Check if we're coming from dashboard with specific lesson to resume
     if (location.state?.fromDashboard && course) {
-      const enrollmentId = location.state.enrollmentId;
-      
       // Scroll to course content section
       const contentElement = document.getElementById('course-content');
       if (contentElement) {
