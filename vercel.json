@@ -5,14 +5,16 @@
       "src": "server/vercel.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["server/**"]
+        "includeFiles": ["server/**"],
+        "excludeFiles": ["**/*.test.js", "**/*.spec.js", "server/node_modules/mongodb-memory-server/**"]
       }
     },
     {
       "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build"
+        "distDir": "build",
+        "buildCommand": "cd client && npm install --production=false && npm run build"
       }
     }
   ],
