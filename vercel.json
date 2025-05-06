@@ -13,7 +13,7 @@
       "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build",
+        "distDir": "client/build",
         "buildCommand": "cd client && npm install --production=false && npm run build"
       }
     }
@@ -21,11 +21,11 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/server/vercel.js"
+      "dest": "server/vercel.js"
     },
     {
       "src": "/health",
-      "dest": "/server/vercel.js"
+      "dest": "server/vercel.js"
     },
     {
       "handle": "filesystem"
