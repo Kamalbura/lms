@@ -35,10 +35,27 @@ app.use(helmet());
 
 // Enable CORS for client
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.CLIENT_URL || true 
-    : true,
-  credentials: true
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Check allowed origins including Vercel domains
+    const allowedOrigins = [
+      process.env.CLIENT_URL,
+      'https://lms-6lul88grg-kamals-projects-a8c83d76.vercel.app',
+      'https://lms-e2nomuxkw-kamals-projects-a8c83d76.vercel.app',
+      'https://lms-flame-pi.vercel.app'
+    ];
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Body parser with size limits
