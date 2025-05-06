@@ -21,15 +21,26 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server/vercel.js"
+      "dest": "/server/vercel.js"
+    },
+    {
+      "src": "/health",
+      "dest": "/server/vercel.js"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/client/build/static/$1"
     },
     {
       "src": "/(.*\\.(js|json|css|ico|png|jpg|jpeg|svg|webp|gif|woff|woff2|ttf|eot)$)",
-      "dest": "client/build/$1"
+      "dest": "/client/build/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "client/build/index.html"
+      "dest": "/client/build/index.html"
     }
   ],
   "env": {
