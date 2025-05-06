@@ -21,14 +21,18 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server/vercel.js"
+      "dest": "/server/vercel.js"
     },
     {
       "src": "/health",
-      "dest": "server/vercel.js"
+      "dest": "/server/vercel.js"
     },
     {
       "handle": "filesystem"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/client/build/assets/$1"
     },
     {
       "src": "/static/(.*)",
