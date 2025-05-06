@@ -20,7 +20,10 @@ const configureSocketServer = (server) => {
         : 'http://localhost:3000',
       methods: ['GET', 'POST'],
       credentials: true
-    }
+    },
+    // Add reconnection parameters
+    pingTimeout: 60000,
+    pingInterval: 25000
   });
 
   // Authentication middleware
@@ -340,11 +343,25 @@ const configureSocketServer = (server) => {
         rooms.set(roomId, new Set());
       }
 
-      // Add user to room
+      // Check if user is rejoining (reconnection scenario)
+      const isRejoining = Array.from(rooms.get(roomId)).some(u => u.id === userId);
+      
+      // Remove any previous instances of this user in the room
+      if (isRejoining) {
+        const usersSet = rooms.get(roomId);
+        const oldUserEntry = Array.from(usersSet).find(u => u.id === userId);
+        if (oldUserEntry) {
+          usersSet.delete(oldUserEntry);
+          logger.info(`User ${userId} (${userName}) is reconnecting to room ${roomId}`);
+        }
+      }
+
+      // Add user to room with current socket id
       rooms.get(roomId).add({
         id: userId,
         name: userName,
-        socketId: socket.id
+        socketId: socket.id,
+        joinedAt: new Date()
       });
 
       // Join socket room
@@ -357,7 +374,8 @@ const configureSocketServer = (server) => {
       socket.to(roomId).emit('user:joined', {
         userId,
         userName,
-        socketId: socket.id
+        socketId: socket.id,
+        rejoining: isRejoining
       });
 
       // Send list of users to new participant

@@ -15,6 +15,10 @@ export const useToast = () => {
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
+  const removeToast = useCallback(id => {
+    setToasts(prevToasts => prevToasts.filter(toast => toast.id !== id));
+  }, []);
+
   const addToast = useCallback((message, options = {}) => {
     const id = nanoid();
     const toast = {
@@ -28,11 +32,7 @@ export const ToastProvider = ({ children }) => {
     
     setToasts(prevToasts => [...prevToasts, toast]);
     return id;
-  }, []);
-
-  const removeToast = useCallback(id => {
-    setToasts(prevToasts => prevToasts.filter(toast => toast.id !== id));
-  }, []);
+  }, [removeToast]);
 
   const showSuccess = useCallback((message, options = {}) => {
     return addToast(message, { ...options, type: 'success' });

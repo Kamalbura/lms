@@ -70,6 +70,11 @@ const enrollmentSchema = new mongoose.Schema({
   lastAccessed: { 
     type: Date 
   },
+  // Simple tracking of completed lessons (by ID)
+  completedLessons: {
+    type: [String],
+    default: []
+  },
   // Activity tracking
   activityLog: [{
     action: {

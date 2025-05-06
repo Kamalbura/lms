@@ -38,32 +38,6 @@ const CreateAssessment = () => {
     
     if (courseId) fetchCourse();
   }, [courseId, token]);
-  
-  // Add file upload handler for assessment materials if needed
-  const handleFileUpload = async (file) => {
-    if (!file) return null;
-    
-    // Max size check
-    if (file.size > 10 * 1024 * 1024) {
-      throw new Error('File size should be less than 10MB');
-    }
-    
-    const formData = new FormData();
-    formData.append('material', file);
-    
-    try {
-      const { data } = await axios.post('/api/uploads/assessment-material', formData, {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      
-      return data.filePath;
-    } catch (err) {
-      throw new Error('Failed to upload file');
-    }
-  };
 
   // Add a new question
   const addQuestion = () => {

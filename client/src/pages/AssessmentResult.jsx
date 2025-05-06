@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import ImageWithFallback from '../components/ImageWithFallback';
 
 const AssessmentResult = () => {
-  const { submissionId, assessmentId } = useParams();
+  const { submissionId } = useParams();
   const navigate = useNavigate();
   const { token } = useSelector(state => state.auth);
   

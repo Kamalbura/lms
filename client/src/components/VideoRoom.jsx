@@ -28,7 +28,12 @@ const VideoRoom = ({ roomId, onError }) => {
     // Connect to WebRTC signaling server
     socketRef.current = io(process.env.REACT_APP_API_URL, {
       path: '/webrtc',
-      withCredentials: true
+      withCredentials: true,
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      timeout: 20000
     });
 
     // Get media stream
@@ -42,6 +47,69 @@ const VideoRoom = ({ roomId, onError }) => {
           roomId,
           userId: user._id,
           userType: user.role
+        });
+
+        // Setup stream error handling
+        stream.getTracks().forEach(track => {
+          track.onended = () => {
+            toast.error(`${track.kind} device has been disconnected.`);
+            if (track.kind === 'video') {
+              setVideoEnabled(false);
+            } else if (track.kind === 'audio') {
+              setAudioEnabled(false);
+            }
+          };
+          
+          track.onmute = () => {
+            toast.warning(`Your ${track.kind} is muted.`);
+            if (track.kind === 'video') {
+              setVideoEnabled(false);
+            } else if (track.kind === 'audio') {
+              setAudioEnabled(false);
+            }
+          };
+          
+          track.onunmute = () => {
+            toast.info(`Your ${track.kind} is available again.`);
+            if (track.kind === 'video') {
+              setVideoEnabled(true);
+            } else if (track.kind === 'audio') {
+              setAudioEnabled(true);
+            }
+          };
+        });
+
+        // Handle socket reconnection
+        socketRef.current.on('reconnect', (attemptNumber) => {
+          console.log(`Reconnected to signaling server after ${attemptNumber} attempts`);
+          toast.success('Reconnected to video session!');
+          
+          // Re-join room on reconnection
+          socketRef.current.emit('join-room', {
+            roomId,
+            userId: user._id,
+            userType: user.role
+          });
+        });
+
+        socketRef.current.on('reconnecting', (attemptNumber) => {
+          console.log(`Attempting to reconnect... (${attemptNumber})`);
+          toast.warning('Connection lost. Attempting to reconnect...', {
+            autoClose: false,
+            toastId: 'reconnecting'
+          });
+        });
+
+        socketRef.current.on('reconnect_error', (error) => {
+          console.error('Reconnection error:', error);
+          toast.error('Failed to reconnect. Please refresh the page.');
+        });
+
+        socketRef.current.on('reconnect_failed', () => {
+          console.error('Failed to reconnect after all attempts');
+          toast.error('Connection lost. Please refresh the page to rejoin.', {
+            autoClose: false
+          });
         });
 
         // Listen for other users in room
@@ -118,6 +186,78 @@ const VideoRoom = ({ roomId, onError }) => {
       }
     };
   }, [roomId, user._id]);
+
+  // Add periodic connection quality monitoring
+  useEffect(() => {
+    if (!stream || peers.length === 0) return;
+    
+    // Function to collect WebRTC stats
+    const collectStats = async () => {
+      try {
+        // Monitor the first peer connection for simplicity
+        const peerObj = peersRef.current[0];
+        if (!peerObj || !peerObj.peer) return;
+        
+        const stats = await peerObj.peer._pc.getStats();
+        let rtt = 0;
+        let packetLoss = 0;
+        let bitrate = 0;
+        let framesDecoded = 0;
+        
+        stats.forEach(report => {
+          if (report.type === 'candidate-pair' && report.state === 'succeeded') {
+            rtt = report.currentRoundTripTime * 1000; // Convert to ms
+          }
+          if (report.type === 'inbound-rtp' && report.mediaType === 'video') {
+            packetLoss = report.packetsLost;
+            framesDecoded = report.framesDecoded;
+            
+            // Calculate bitrate
+            if (report.bytesReceived && report.timestamp && window.lastReport) {
+              const bytesNow = report.bytesReceived;
+              const bytesLast = window.lastReport.bytesReceived || 0;
+              const timeNow = report.timestamp;
+              const timeLast = window.lastReport.timestamp || timeNow;
+              
+              const timeDiff = timeNow - timeLast;
+              if (timeDiff > 0) {
+                bitrate = 8 * (bytesNow - bytesLast) / timeDiff; // bits per second
+              }
+            }
+            
+            // Store last report for comparison
+            window.lastReport = report;
+          }
+        });
+        
+        // Determine quality based on metrics
+        let quality = 'good';
+        
+        if (rtt > 500 || packetLoss > 5) {
+          quality = 'critical';
+        } else if (rtt > 300 || packetLoss > 2) {
+          quality = 'poor';
+        } else if (rtt > 100) {
+          quality = 'medium';
+        }
+        
+        // Update connection quality state and adapt video settings
+        if (quality !== connectionQuality) {
+          handleQualityChange(quality);
+          
+          // Log metrics
+          console.log(`Connection metrics - RTT: ${Math.round(rtt)}ms, Packet Loss: ${packetLoss}, Bitrate: ${Math.round(bitrate/1000)}kbps`);
+        }
+      } catch (error) {
+        console.error('Error collecting WebRTC stats:', error);
+      }
+    };
+    
+    // Collect stats every 5 seconds
+    const statsInterval = setInterval(collectStats, 5000);
+    
+    return () => clearInterval(statsInterval);
+  }, [stream, peers.length, connectionQuality]);
 
   function createPeer(userToSignal, callerId, stream) {
     const peer = new Peer({

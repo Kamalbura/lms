@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 const CourseEdit = () => {
-  const navigate = useNavigate();
   const { slug } = useParams();
+  const navigate = useNavigate();
   const { token } = useSelector(state => state.auth);
   
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,6 @@ const CourseEdit = () => {
   const [success, setSuccess] = useState(false);
   
   // Course form state
-  const [courseId, setCourseId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -23,7 +22,6 @@ const CourseEdit = () => {
   const [modules, setModules] = useState([]);
   const [thumbnail, setThumbnail] = useState('');
   const [thumbnailFile, setThumbnailFile] = useState(null);
-  const [thumbnailLoading, setThumbnailLoading] = useState(false);
   
   useEffect(() => {
     const fetchCourse = async () => {
@@ -34,7 +32,6 @@ const CourseEdit = () => {
         });
         
         // Populate form data
-        setCourseId(data._id);
         setTitle(data.title);
         setDescription(data.description || '');
         setCategory(data.category || '');

@@ -1,5 +1,9 @@
 import Enrollment from "../models/Enrollment.js";
 import Course from "../models/Course.js";
+import User from "../models/User.js";
+import Certificate from "../models/Certificate.js";
+import certificateGenerator from "../utils/certificateGenerator.js";
+import logger from "../utils/logger.js";
 
 // Enroll user in a course
 export const enrollInCourse = async (req, res) => {
@@ -121,7 +125,7 @@ export const markLessonComplete = async (req, res) => {
     const enrollment = await Enrollment.findOne({
       user: req.user._id,
       course: courseId
-    });
+    }).populate("course", "title instructor");
     
     if (!enrollment) {
       return res.status(404).json({ message: "Enrollment not found" });
@@ -144,11 +148,67 @@ export const markLessonComplete = async (req, res) => {
     
     // Calculate progress percentage
     if (totalLessons > 0) {
-      enrollment.progress = Math.round((enrollment.completedLessons.length / totalLessons) * 100);
+      const newProgress = Math.round((enrollment.completedLessons.length / totalLessons) * 100);
+      enrollment.progress = newProgress;
+      
+      // If course is now complete (100%), generate certificate
+      if (newProgress === 100 && (!enrollment.completed || !enrollment.certificate?.certificateId)) {
+        enrollment.completed = true;
+        enrollment.completedAt = new Date();
+        
+        try {
+          // Get user information
+          const user = await User.findById(req.user._id);
+          
+          // Get instructor name
+          const instructorName = course.instructor 
+            ? (await User.findById(course.instructor)).name 
+            : 'Course Instructor';
+          
+          // Generate certificate
+          const certificateData = await certificateGenerator.generateCertificate({
+            studentName: user.name,
+            courseName: course.title,
+            completionDate: new Date().toISOString(),
+            instructorName,
+            courseId: course._id,
+            userId: user._id
+          });
+          
+          // Save certificate in database
+          const certificate = await Certificate.create({
+            certificateId: certificateData.certificateId,
+            student: user._id,
+            course: course._id,
+            issuedAt: new Date(),
+            issuedBy: instructorName,
+            certificateUrl: certificateData.certificateUrl,
+            verificationUrl: certificateData.verificationUrl,
+            metadata: {
+              template: 'default',
+              completionScore: enrollment.averageScore || 0,
+              hoursSpent: enrollment.totalTimeSpent || 0
+            }
+          });
+          
+          // Update enrollment with certificate information
+          enrollment.certificate = {
+            issued: true,
+            issuedAt: new Date(),
+            certificateId: certificateData.certificateId,
+            certificateUrl: certificateData.certificateUrl
+          };
+          
+          logger.info(`Certificate generated for user ${user._id} completing course ${course._id}`);
+        } catch (certError) {
+          logger.error(`Failed to generate certificate: ${certError.message}`, { userId: req.user._id, courseId });
+          // Don't fail the request if certificate generation fails
+        }
+      }
     }
     
     // Update last accessed time
-    enrollment.lastAccessed = Date.now();
+    enrollment.lastAccessed = new Date();
     
     await enrollment.save();
     

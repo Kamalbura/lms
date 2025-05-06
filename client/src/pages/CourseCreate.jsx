@@ -21,7 +21,6 @@ const CourseCreate = () => {
   ]);
   const [thumbnail, setThumbnail] = useState('');
   const [thumbnailFile, setThumbnailFile] = useState(null);
-  const [thumbnailLoading, setThumbnailLoading] = useState(false);
   
   const addModule = () => {
     setModules([...modules, { title: '', lessons: [{ title: '', content: '', duration: 0 }] }]);

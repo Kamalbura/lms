@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import logger from '../utils/logger.js';
 
 // Middleware to protect routes - verifies JWT token
 export const protect = async (req, res, next) => {
@@ -25,13 +26,36 @@ export const protect = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       
       // Add user to request object (without password)
-      req.user = await User.findById(decoded.id).select('-password');
+      const user = await User.findById(decoded.id).select('-password');
       
+      // Check if user still exists
+      if (!user) {
+        return res.status(401).json({ message: 'User no longer exists' });
+      }
+      
+      // Check if user changed password after token was issued
+      if (user.changedPasswordAfter && user.changedPasswordAfter(decoded.iat)) {
+        return res.status(401).json({ message: 'Password changed recently, please log in again' });
+      }
+      
+      // User is valid, proceed
+      req.user = user;
       next();
     } catch (error) {
-      res.status(401).json({ message: 'Not authorized, token failed' });
+      logger.warn(`Authentication failed: ${error.message}`);
+      
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({ message: 'Authentication token expired, please log in again' });
+      } 
+      
+      if (error.name === 'JsonWebTokenError') {
+        return res.status(401).json({ message: 'Invalid authentication token' });
+      }
+      
+      res.status(401).json({ message: 'Authentication failed' });
     }
   } catch (error) {
+    logger.error(`Server error in auth middleware: ${error.message}`);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };

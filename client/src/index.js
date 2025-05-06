@@ -7,12 +7,6 @@ import store from './redux/store';
 import { Toaster } from 'react-hot-toast';
 import ErrorBoundary from './components/ErrorBoundary';
 
-// Ensure environment variables are handled correctly
-const env = {
-  NODE_ENV: 'development',
-  PUBLIC_URL: ''
-};
-
 // Add global error handler
 window.addEventListener('error', (event) => {
   console.error('Global error:', event.error);
@@ -26,6 +20,10 @@ window.addEventListener('unhandledrejection', (event) => {
 
 // Debug message to verify script execution
 console.log("React application starting...");
+
+// Get environment for debugging purposes
+const currentEnv = process.env.NODE_ENV || 'development';
+console.log(`Current environment: ${currentEnv}`);
 
 // Diagnostic function to check if important components exist
 const checkComponents = () => {

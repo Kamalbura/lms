@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -25,6 +26,7 @@ const userSchema = new mongoose.Schema({
     default: 'student'
   },
   avatar: String,
+  profileImage: String, // Added to match authController.js and authRoutes.js
   profile: {
     bio: String,
     title: String,
@@ -163,6 +165,11 @@ userSchema.pre('save', function(next) {
 // Method to check password
 userSchema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// Alias for matchPassword to maintain compatibility with authController
+userSchema.methods.comparePassword = async function(enteredPassword) {
+  return await this.matchPassword(enteredPassword);
 };
 
 // Method to check if password was changed after token was issued

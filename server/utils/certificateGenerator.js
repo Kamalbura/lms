@@ -3,8 +3,14 @@ import fs from 'fs';
 import path from 'path';
 import QRCode from 'qrcode';
 import { nanoid } from 'nanoid';
-import cloudinary from './cloudinary.js';
+import { uploadFile } from './cloudinary.js';
 import logger from './logger.js';
+
+// Ensure temp directory exists for certificate generation
+const tempDir = path.join('uploads', 'temp');
+if (!fs.existsSync(tempDir)) {
+  fs.mkdirSync(tempDir, { recursive: true });
+}
 
 class CertificateGenerator {
   constructor() {
@@ -135,11 +141,15 @@ class CertificateGenerator {
       await new Promise((resolve) => stream.on('finish', resolve));
 
       // Upload to Cloudinary
-      const result = await cloudinary.uploader.upload(tempPath, {
+      const uploadResult = await uploadFile(tempPath, {
         folder: 'certificates',
         public_id: certificateId,
         resource_type: 'raw'
       });
+
+      if (!uploadResult.success) {
+        throw new Error(`Failed to upload certificate: ${uploadResult.error}`);
+      }
 
       // Clean up temporary files
       fs.unlinkSync(tempPath);
@@ -148,7 +158,7 @@ class CertificateGenerator {
       // Return certificate data
       return {
         certificateId,
-        certificateUrl: result.secure_url,
+        certificateUrl: uploadResult.url,
         verificationUrl
       };
     } catch (error) {
@@ -159,16 +169,29 @@ class CertificateGenerator {
 
   async verifyCertificate(certificateId) {
     try {
-      // Here you would typically verify against your database
-      // For now returning a mock response
+      // Import models dynamically to avoid circular dependencies
+      const Certificate = (await import('../models/Certificate.js')).default;
+      
+      // Check if certificate exists in database
+      const certificate = await Certificate.findOne({ certificateId })
+        .populate('student', 'name email')
+        .populate('course', 'title');
+      
+      if (!certificate) {
+        return {
+          isValid: false,
+          message: 'Certificate not found or invalid'
+        };
+      }
+      
       return {
         isValid: true,
         details: {
           certificateId,
-          studentName: 'John Doe',
-          courseName: 'Web Development',
-          completionDate: '2025-05-01',
-          instructorName: 'Jane Smith'
+          studentName: certificate.student.name,
+          courseName: certificate.course.title,
+          completionDate: certificate.issuedAt.toISOString().split('T')[0],
+          instructorName: certificate.issuedBy || 'Course Instructor'
         }
       };
     } catch (error) {

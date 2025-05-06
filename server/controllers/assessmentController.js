@@ -1,6 +1,7 @@
 import Assessment from '../models/Assessment.js';
 import Submission from '../models/Submission.js';
 import Course from '../models/Course.js';
+import User from '../models/User.js';
 import { sendAssessmentResultEmail } from '../utils/email.js';
 
 // Create a new assessment

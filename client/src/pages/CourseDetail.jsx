@@ -16,11 +16,20 @@ const CourseDetail = () => {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [enrollment, setEnrollment] = useState(null);
   const [showCelebration, setShowCelebration] = useState(false);
-  const [expandedModule, setExpandedModule] = useState(null);
   
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, token, isAuthenticated } = useSelector(state => state.auth);
+  const { token, isAuthenticated } = useSelector(state => state.auth);
+
+  // Handler for the continue learning button in the celebration modal
+  const handleContinueLearning = () => {
+    setShowCelebration(false);
+    // Scroll to course content section
+    const contentElement = document.getElementById('course-content');
+    if (contentElement) {
+      contentElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   // Check if course was just completed
   useEffect(() => {
@@ -101,18 +110,12 @@ const CourseDetail = () => {
             
             for (const lesson of moduleLessons) {
               if (!enrollment.completedLessons.includes(lesson._id)) {
-                setExpandedModule(i); // Expand this module
                 foundIncomplete = true;
                 break;
               }
             }
             
             if (foundIncomplete) break;
-          }
-          
-          // If everything is complete, just expand the first module
-          if (!foundIncomplete && course.modules.length > 0) {
-            setExpandedModule(0);
           }
         }
       }
@@ -181,10 +184,15 @@ const CourseDetail = () => {
   return (
     <div className="container mx-auto p-4">
       {/* Show completion celebration if needed */}
-      <CompletionCelebration 
-        show={showCelebration} 
-        onComplete={() => setShowCelebration(false)} 
-      />
+      {showCelebration && (
+        <CompletionCelebration 
+          title="Congratulations!"
+          message="You have successfully completed this course."
+          onContinue={handleContinueLearning}
+          score={enrollment?.progress}
+          showConfetti={true}
+        />
+      )}
       
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         {course.thumbnail && (
@@ -253,7 +261,12 @@ const CourseDetail = () => {
                 )}
               </div>
               
-              <LessonView course={course} enrollment={enrollment} />
+              <LessonView 
+                course={course} 
+                enrollment={enrollment}
+                onProgressUpdate={(updatedEnrollment) => setEnrollment(updatedEnrollment)}
+                onCourseCompleted={() => setShowCelebration(true)}
+              />
               
               <div className="mt-8">
                 <h2 className="text-2xl font-bold mb-4">Course Discussion</h2>

@@ -95,9 +95,42 @@ const generateVideoThumbnail = async (publicId) => {
   }
 };
 
+// Generic file upload function (for certificates, images, etc.)
+const uploadFile = async (filePath, options = {}) => {
+  try {
+    const defaults = {
+      resource_type: 'auto',
+      folder: 'uploads',
+      overwrite: true,
+      quality: 'auto',
+      fetch_format: 'auto'
+    };
+
+    const result = await cloudinary.uploader.upload(filePath, {
+      ...defaults,
+      ...options
+    });
+
+    return {
+      success: true,
+      url: result.secure_url,
+      publicId: result.public_id,
+      format: result.format,
+      size: result.bytes
+    };
+  } catch (error) {
+    logger.error('Cloudinary file upload error:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+};
+
 export {
   cloudinary as default,
   uploadVideo,
   deleteVideo,
-  generateVideoThumbnail
+  generateVideoThumbnail,
+  uploadFile
 };

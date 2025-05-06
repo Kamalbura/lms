@@ -1,5 +1,31 @@
 // Email service for both development and production environments
 import logger from './logger.js';
+import nodemailer from 'nodemailer';
+
+// Configure email transporter based on environment
+let transporter;
+
+if (process.env.NODE_ENV === 'production') {
+  // Production email transporter
+  transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: process.env.EMAIL_SECURE === 'true',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+  
+  // Verify connection
+  transporter.verify()
+    .then(() => {
+      logger.info('Email service connected successfully');
+    })
+    .catch((error) => {
+      logger.error(`Email service connection error: ${error.message}`);
+    });
+}
 
 // Mock transporter (just logs instead of sending in development)
 const logEmailAttempt = (to, subject, content) => {
@@ -19,6 +45,31 @@ const logEmailAttempt = (to, subject, content) => {
   console.log('------------------------------');
 };
 
+// Send email (real in production, mock in development)
+const sendEmail = async (to, subject, content) => {
+  try {
+    if (process.env.NODE_ENV !== 'production') {
+      // In development, just log the email
+      logEmailAttempt(to, subject, content);
+      return { success: true };
+    } else {
+      // In production, send real email
+      await transporter.sendMail({
+        from: process.env.EMAIL_FROM || '"ProLearn LMS" <noreply@prolearn.com>',
+        to,
+        subject,
+        html: content,
+      });
+      
+      logger.info(`Email sent to ${to}: ${subject}`);
+      return { success: true };
+    }
+  } catch (error) {
+    logger.error(`Email sending error: ${error.message}`);
+    return { success: false, error: error.message };
+  }
+};
+
 // Send welcome email
 export const sendWelcomeEmail = async (to, name) => {
   try {
@@ -30,26 +81,7 @@ export const sendWelcomeEmail = async (to, name) => {
     const subject = 'Welcome to ProLearn LMS!';
     const content = `Hello ${name}, Welcome to ProLearn LMS! You now have access to all our courses.`;
     
-    // In development, just log the email
-    if (process.env.NODE_ENV !== 'production') {
-      logEmailAttempt(to, subject, content);
-      return { success: true };
-    } else {
-      // In production, we would send a real email
-      // This would be implemented with a real email service
-      // like SendGrid, Mailgun, AWS SES, etc.
-      logEmailAttempt(to, subject, content); // Fallback to log for now
-      
-      // TODO: Implement actual email sending in production
-      // const result = await emailService.send({
-      //   to,
-      //   subject,
-      //   html: content
-      // });
-      
-      logger.info(`Welcome email sent to ${to}`);
-      return { success: true };
-    }
+    return await sendEmail(to, subject, content);
   } catch (error) {
     logger.error(`Error sending welcome email: ${error.message}`);
     return { success: false, error: error.message };
@@ -65,9 +97,7 @@ export const sendAssessmentResultEmail = async (to, name, assessmentTitle, score
     }
     
     const content = `Hello ${name}, You have completed the assessment: ${assessmentTitle}. Your score: ${score}/${maxScore} (${percentage}%)`;
-    logEmailAttempt(to, `Assessment Result: ${assessmentTitle}`, content);
-    
-    return { success: true };
+    return await sendEmail(to, `Assessment Result: ${assessmentTitle}`, content);
   } catch (error) {
     logger.error('Email sending error:', error);
     return { success: false, error: error.message };
@@ -130,20 +160,13 @@ export const sendOfficeHourBookingEmail = async (
       The ProLearn Team
     `;
 
-    // In development, just log the emails
-    if (process.env.NODE_ENV !== 'production') {
-      logEmailAttempt(studentEmail, studentSubject, studentContent);
-      logEmailAttempt(instructorEmail, instructorSubject, instructorContent);
+    const studentEmailResult = await sendEmail(studentEmail, studentSubject, studentContent);
+    const instructorEmailResult = await sendEmail(instructorEmail, instructorSubject, instructorContent);
+
+    if (studentEmailResult.success && instructorEmailResult.success) {
       return { success: true };
     } else {
-      // In production, we would send real emails
-      logEmailAttempt(studentEmail, studentSubject, studentContent);
-      logEmailAttempt(instructorEmail, instructorSubject, instructorContent);
-      
-      // TODO: Implement actual email sending in production
-      
-      logger.info(`Office hour booking emails sent to ${studentEmail} and ${instructorEmail}`);
-      return { success: true };
+      return { success: false, error: 'Failed to send one or more emails' };
     }
   } catch (error) {
     logger.error(`Error sending office hour booking emails: ${error.message}`);
@@ -203,55 +226,16 @@ export const sendOfficeHourCancellationEmail = async (
       The ProLearn Team
     `;
 
-    // In development, just log the emails
-    if (process.env.NODE_ENV !== 'production') {
-      logEmailAttempt(studentEmail, studentSubject, studentContent);
-      logEmailAttempt(instructorEmail, instructorSubject, instructorContent);
+    const studentEmailResult = await sendEmail(studentEmail, studentSubject, studentContent);
+    const instructorEmailResult = await sendEmail(instructorEmail, instructorSubject, instructorContent);
+
+    if (studentEmailResult.success && instructorEmailResult.success) {
       return { success: true };
     } else {
-      // In production, we would send real emails
-      logEmailAttempt(studentEmail, studentSubject, studentContent);
-      logEmailAttempt(instructorEmail, instructorSubject, instructorContent);
-      
-      // TODO: Implement actual email sending in production
-      
-      logger.info(`Office hour cancellation emails sent to ${studentEmail} and ${instructorEmail}`);
-      return { success: true };
+      return { success: false, error: 'Failed to send one or more emails' };
     }
   } catch (error) {
     logger.error(`Error sending office hour cancellation emails: ${error.message}`);
     return { success: false, error: error.message };
   }
 };
-
-// For future: add real email sending functionality for production
-// This would involve using a library like nodemailer
-// Example implementation:
-/*
-import nodemailer from 'nodemailer';
-
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: Boolean(process.env.EMAIL_SECURE),
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
-export const sendRealEmail = async (to, subject, htmlContent) => {
-  try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM,
-      to,
-      subject,
-      html: htmlContent,
-    });
-    return { success: true };
-  } catch (error) {
-    logger.error('Email sending error:', error);
-    return { success: false, error: error.message };
-  }
-};
-*/

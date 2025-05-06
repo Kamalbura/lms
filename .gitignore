@@ -28,3 +28,4 @@ server/logs
 *.ntvs*
 *.njsproj
 *.sln
+.vercel

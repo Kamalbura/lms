@@ -3,14 +3,16 @@
   "builds": [
     {
       "src": "server/vercel.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["server/**"]
+      }
     },
     {
       "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "buildCommand": "npm run build",
-        "outputDirectory": "build"
+        "distDir": "build"
       }
     }
   ],
@@ -20,8 +22,12 @@
       "dest": "server/vercel.js"
     },
     {
-      "src": "/(.*)",
+      "src": "/(.*\\.(js|json|css|ico|png|jpg|jpeg|svg|webp|gif|woff|woff2|ttf|eot)$)",
       "dest": "client/build/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "client/build/index.html"
     }
   ],
   "env": {
