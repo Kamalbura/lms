@@ -1,4 +1,6 @@
 import Course from "../models/Course.js";
+import { uploadFile } from "../utils/cloudinary.js";
+import fs from "fs";
 
 // Create a new course
 export const createCourse = async (req, res) => {
@@ -150,5 +152,62 @@ export const getInstructorCourses = async (req, res) => {
     res.json(courses);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Upload course thumbnail
+export const uploadThumbnail = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Please upload an image file' });
+    }
+
+    const courseId = req.params.id;
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      // Clean up the uploaded file
+      if (fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+      return res.status(404).json({ message: 'Course not found' });
+    }
+
+    // Check if user is instructor of this course
+    if (course.instructor.toString() !== req.user._id.toString()) {
+      // Clean up the uploaded file
+      if (fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+      return res.status(401).json({ message: 'Not authorized to update this course' });
+    }
+
+    // Upload to Cloudinary
+    const result = await uploadFile(req.file.path, {
+      folder: 'course-thumbnails',
+      public_id: `course-${courseId}`,
+      overwrite: true
+    });
+
+    if (!result.success) {
+      return res.status(500).json({ message: 'Error uploading to Cloudinary', error: result.error });
+    }
+    
+    // Update course with the Cloudinary URL
+    course.thumbnail = result.url;
+    await course.save();
+
+    // Clean up the uploaded file after successful Cloudinary upload
+    if (fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+
+    res.json({
+      message: 'Course thumbnail uploaded successfully',
+      thumbnailUrl: course.thumbnail
+    });
+  } catch (error) {
+    logger.error('Error uploading course thumbnail:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
